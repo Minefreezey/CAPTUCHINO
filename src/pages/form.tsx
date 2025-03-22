@@ -12,6 +12,7 @@ import {
 
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
+import Captchino from "@/captuchino/captuchino";
 export const animals = [
   { key: "cat", label: "Cat" },
   { key: "dog", label: "Dog" },
@@ -52,10 +53,11 @@ export default function App() {
           >
             CAPTUCHINO
           </span>
-          <span className={title({})}>☕</span>
+          <span className={title({})}> ☕</span>
         </div>
-        <Form className="w-full max-w-xs" onSubmit={onSubmit}>
-          {/* <Input
+        <Captchino>
+          <Form className="w-full max-w-xs" onSubmit={onSubmit}>
+            {/* <Input
             isRequired
             errorMessage="Please enter a valid username"
             label="Username"
@@ -73,46 +75,47 @@ export default function App() {
             placeholder="Enter your email"
             type="email"
           /> */}
-          <DatePicker label="Date" labelPlacement="outside" />
-          <NumberInput
-            className="max-w-xs"
-            label="Number"
-            labelPlacement="outside"
-            placeholder="Enter the amount"
-          />
-          <InputOtp
-            isRequired
-            aria-label="OTP input field"
-            label="OTP"
-            length={7}
-            name="otp"
-            placeholder="Enter code"
-          />
-          <Select
-            className="max-w-xs"
-            label="Favorite Animal"
-            labelPlacement="outside"
-            placeholder="Select an animal"
-          >
-            {animals.map((animal) => (
-              <SelectItem key={animal.key}>{animal.label}</SelectItem>
-            ))}
-          </Select>
-          <Switch defaultSelected size="sm">
-            Enable A function
-          </Switch>
-          <Switch defaultSelected size="sm">
-            Enable B function
-          </Switch>
-          <Button type="submit" variant="bordered">
-            Submit
-          </Button>
-          {submitted && (
-            <div className="text-small text-default-500">
-              You submitted: <code>{JSON.stringify(submitted)}</code>
-            </div>
-          )}
-        </Form>
+            <DatePicker label="Date" labelPlacement="outside" />
+            <NumberInput
+              className="max-w-xs"
+              label="Number"
+              labelPlacement="outside"
+              placeholder="Enter the amount"
+            />
+            <InputOtp
+              isRequired
+              aria-label="OTP input field"
+              label="OTP"
+              length={7}
+              name="otp"
+              placeholder="Enter code"
+            />
+            <Select
+              className="max-w-xs"
+              label="Favorite Animal"
+              labelPlacement="outside"
+              placeholder="Select an animal"
+            >
+              {animals.map((animal) => (
+                <SelectItem key={animal.key}>{animal.label}</SelectItem>
+              ))}
+            </Select>
+            <Switch defaultSelected size="sm">
+              Enable A function
+            </Switch>
+            <Switch defaultSelected size="sm">
+              Enable B function
+            </Switch>
+            <Button type="submit" variant="bordered">
+              Submit
+            </Button>
+            {submitted && (
+              <div className="text-small text-default-500">
+                You submitted: <code>{JSON.stringify(submitted)}</code>
+              </div>
+            )}
+          </Form>
+        </Captchino>
       </section>
     </DefaultLayout>
   );
