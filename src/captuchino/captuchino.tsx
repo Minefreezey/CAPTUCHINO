@@ -33,7 +33,7 @@ export default function Captuchino({ children, isRobot }: CaptuchinoProps) {
 
   return (
     <div
-      className={`relative flex flex-col h-screen ${
+      className={`relative flex flex-col  ${
         isRobot === "yes" ? "border-2 border-red-500 animate-pulse" : ""
       }`}
       style={{
