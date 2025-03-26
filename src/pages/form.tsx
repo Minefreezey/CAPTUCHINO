@@ -28,7 +28,7 @@ export const animals = [
   { key: "otter", label: "Otter" },
   { key: "crocodile", label: "Crocodile" },
 ];
-export default function App() {
+export default function FormPage() {
   const [submitted, setSubmitted] = React.useState(null);
   const [status, setStatus] = React.useState<"yes" | "no">("no");
 
