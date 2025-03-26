@@ -31,11 +31,12 @@ export default function Captuchino({ children, isRobot }: CaptuchinoProps) {
 
   const handleMouseMove = (event: MouseEvent) => {
     const now = Date.now();
+    const newMousePosition = { x: event.clientX, y: event.clientY };
 
+    setMousePosition(newMousePosition);
+
+    // Sampling rate of 10ms
     if (now - lastTimeRef.current > 10) {
-      const newMousePosition = { x: event.clientX, y: event.clientY };
-
-      setMousePosition(newMousePosition);
       setMouseLog((prev) => {
         const newLog = [
           ...prev,
