@@ -18,6 +18,11 @@ interface Coordinates {
   time_stamp: number;
 }
 
+interface SmoothnessResult {
+  avgJitter: number;
+  avgAngularChange: number;
+}
+
 export default function Captuchino({ children, isRobot }: CaptuchinoProps) {
   const [mousePosition, setMousePosition] = useState<MousePosition>({
     x: 0,
@@ -64,13 +69,21 @@ export default function Captuchino({ children, isRobot }: CaptuchinoProps) {
     };
   }, []);
 
-  const checkForBot = (mouseLog: Coordinates[]) => {
-    Smoothness(mouseLog);
+  const checkForBot = (mouseLog: Coordinates[]): SmoothnessResult => {
+    return Smoothness(mouseLog);
   };
 
   useEffect(() => {
     if (mouseLog.length >= BATCH_SIZE && mouseLog.length % BATCH_SIZE === 0) {
-      checkForBot(mouseLog);
+      var result: SmoothnessResult = checkForBot(mouseLog);
+
+      if (result.avgJitter < 0.0001 || result.avgAngularChange < 0.05) {
+        console.log("Bot Detected");
+        // setSubmitted(data);
+        // setStatus("yes");
+      } else {
+        console.log("Not a Bot");
+      }
     }
   }, [mouseLog]);
 
