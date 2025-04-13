@@ -6,9 +6,8 @@ import { Smoothness } from "@/botDetection/mouseCoordinates";
 interface CaptuchinoProps {
   children: React.ReactNode;
   status: "yes" | "no";
-  setStatus: React.SetStateAction<"yes" | "no">;
+  setStatus: React.Dispatch<React.SetStateAction<"yes" | "no">>;
 }
-
 interface MousePosition {
   x: number;
   y: number;
@@ -91,12 +90,7 @@ export default function Captuchino({
   }, [mouseLog]);
 
   return (
-    <div
-      className={`relative flex flex-col ${status === "yes" ? "border-2 border-red-500 animate-pulse" : ""}`}
-      style={{
-        boxShadow: status === "yes" ? "inset 0 0 30px 10px red" : undefined,
-      }}
-    >
+    <div className='relative flex flex-col'>
       <div>
         <Code>{`Mouse Position: X: ${mousePosition.x}, Y: ${mousePosition.y}`}</Code>{" "}
         <br />
