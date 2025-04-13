@@ -55,7 +55,7 @@ export default function FormPage() {
           </span>
           <span className={title({})}> ☕</span>
         </div>
-        <Captchino>
+        <Captchino setStatus={setStatus} status={status}>
           <Form className="w-full max-w-xs" onSubmit={onSubmit}>
             {/* <Input
             isRequired

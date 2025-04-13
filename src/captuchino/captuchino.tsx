@@ -5,7 +5,8 @@ import { Smoothness } from "@/botDetection/mouseCoordinates";
 
 interface CaptuchinoProps {
   children: React.ReactNode;
-  isRobot?: "yes" | "no";
+  status: "yes" | "no";
+  setStatus: React.SetStateAction<"yes" | "no">;
 }
 
 interface MousePosition {
@@ -23,7 +24,11 @@ interface SmoothnessResult {
   avgAngularChange: number;
 }
 
-export default function Captuchino({ children, isRobot }: CaptuchinoProps) {
+export default function Captuchino({
+  children,
+  status,
+  setStatus,
+}: CaptuchinoProps) {
   const [mousePosition, setMousePosition] = useState<MousePosition>({
     x: 0,
     y: 0,
@@ -79,8 +84,6 @@ export default function Captuchino({ children, isRobot }: CaptuchinoProps) {
 
       if (result.avgJitter < 0.0001 || result.avgAngularChange < 0.05) {
         console.log("Bot Detected");
-        // setSubmitted(data);
-        // setStatus("yes");
       } else {
         console.log("Not a Bot");
       }
@@ -89,9 +92,9 @@ export default function Captuchino({ children, isRobot }: CaptuchinoProps) {
 
   return (
     <div
-      className={`relative flex flex-col ${isRobot === "yes" ? "border-2 border-red-500 animate-pulse" : ""}`}
+      className={`relative flex flex-col ${status === "yes" ? "border-2 border-red-500 animate-pulse" : ""}`}
       style={{
-        boxShadow: isRobot === "yes" ? "inset 0 0 30px 10px red" : undefined,
+        boxShadow: status === "yes" ? "inset 0 0 30px 10px red" : undefined,
       }}
     >
       <div>
