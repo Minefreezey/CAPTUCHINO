@@ -40,6 +40,7 @@ export default function FormPage() {
 
     // setSubmitted(data);
     setSubmitStatus(status);
+    console.log("submitted !, status: ", status);
   };
 
   return (

@@ -23,6 +23,11 @@ interface SmoothnessResult {
   avgAngularChange: number;
 }
 
+interface HistoryResult {
+  calculateCount: number;
+  botCount: number;
+}
+
 export default function Captuchino({
   children,
   status,
@@ -37,6 +42,11 @@ export default function Captuchino({
   const lastTimeRef = useRef<number>(0);
   const MAX_LOG_SIZE = 200;
   const BATCH_SIZE = 50;
+  const [historyResult, setHistoryResult] = useState<HistoryResult>({
+    calculateCount: 0,
+    botCount: 0,
+  });
+  const BOT_RATIO_THRESHOLD = 0.3; // เริ่มต้นประมาณนี้ก่อน
 
   const handleMouseMove = (event: MouseEvent) => {
     const now = Date.now();
@@ -79,18 +89,33 @@ export default function Captuchino({
 
   useEffect(() => {
     if (mouseLog.length >= BATCH_SIZE && mouseLog.length % BATCH_SIZE === 0) {
-      var result: SmoothnessResult = checkForBot(mouseLog);
+      const result: SmoothnessResult = checkForBot(mouseLog);
 
-      if (result.avgJitter < 0.0001 || result.avgAngularChange < 0.05) {
-        console.log("Bot Detected");
-      } else {
-        console.log("Not a Bot");
-      }
+      setHistoryResult((prev) => {
+        const newCalculateCount = prev.calculateCount + 1;
+        const newBotCount =
+          prev.botCount +
+          (result.avgJitter < 0.0001 || result.avgAngularChange < 0.05 ? 1 : 0);
+
+        const botDetectionRatio = newBotCount / newCalculateCount;
+
+        console.log("bot detection ratio: ", botDetectionRatio);
+
+        if (botDetectionRatio > BOT_RATIO_THRESHOLD) {
+          setStatus("yes");
+          console.log("set status to: yes");
+        }
+
+        return {
+          calculateCount: newCalculateCount,
+          botCount: newBotCount,
+        };
+      });
     }
-  }, [mouseLog]);
+  }, [mouseLog, setStatus]);
 
   return (
-    <div className='relative flex flex-col'>
+    <div className="relative flex flex-col">
       <div>
         <Code>{`Mouse Position: X: ${mousePosition.x}, Y: ${mousePosition.y}`}</Code>{" "}
         <br />

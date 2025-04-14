@@ -45,8 +45,8 @@ export const Smoothness = (mouseLog: Coordinates[]) => {
   const avgJitter = totalJitter / (mouseLog.length - 2);
   const avgAngularChange = totalAngularChange / (mouseLog.length - 2);
 
-  console.log("Average Jitter:", avgJitter);
-  console.log("Average Angular Change:", avgAngularChange);
+  // console.log("Average Jitter:", avgJitter);
+  // console.log("Average Angular Change:", avgAngularChange);
 
   return { avgJitter, avgAngularChange };
 };
