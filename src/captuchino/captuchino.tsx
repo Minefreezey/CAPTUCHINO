@@ -115,6 +115,9 @@ export default function Captuchino({
         if (botDetectionRatio > BOT_RATIO_THRESHOLD) {
           setStatus("yes");
           console.log("set status to: yes");
+        } else {
+          setStatus("no");
+          console.log("set status to: no");
         }
 
         return {
