@@ -31,6 +31,7 @@ export const animals = [
 export default function FormPage() {
   const [submitted, setSubmitted] = React.useState(null);
   const [status, setStatus] = React.useState<"yes" | "no">("no");
+  const [submitStatus, setSubmitStatus] = React.useState<"yes" | "no">("no");
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,11 +39,12 @@ export default function FormPage() {
     const data = Object.fromEntries(new FormData(e.currentTarget));
 
     // setSubmitted(data);
-    setStatus("yes");
+    setSubmitStatus(status);
+    console.log("submitted !, status: ", status);
   };
 
   return (
-    <DefaultLayout isRobot={status}>
+    <DefaultLayout isRobot={submitStatus}>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         <div className="inline-block max-w-lg text-center justify-center">
           <span
@@ -55,7 +57,7 @@ export default function FormPage() {
           </span>
           <span className={title({})}> ☕</span>
         </div>
-        <Captchino>
+        <Captchino setStatus={setStatus} status={status}>
           <Form className="w-full max-w-xs" onSubmit={onSubmit}>
             {/* <Input
             isRequired
