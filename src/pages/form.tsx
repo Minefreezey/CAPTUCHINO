@@ -79,19 +79,22 @@ export default function FormPage() {
             type="email"
           /> */}
             <Input
+              name="fullname"
               className="max-w-xs"
               label="Full name"
               labelPlacement="outside"
               placeholder="Enter your full name"
             />
-            <DatePicker label="Date" labelPlacement="outside" />
+            <DatePicker name="date" label="Date" labelPlacement="outside" />
             <NumberInput
+              name="number"
               className="max-w-xs"
               label="Number"
               labelPlacement="outside"
               placeholder="Enter the amount"
             />
             <InputOtp
+
               isRequired
               aria-label="OTP input field"
               label="OTP"
@@ -100,6 +103,7 @@ export default function FormPage() {
               placeholder="Enter code"
             />
             <Select
+              name="select"
               className="max-w-xs"
               label="Favorite Animal"
               labelPlacement="outside"
@@ -109,13 +113,13 @@ export default function FormPage() {
                 <SelectItem key={animal.key}>{animal.label}</SelectItem>
               ))}
             </Select>
-            <Switch defaultSelected size="sm">
+            <Switch name="switch1" defaultSelected size="sm">
               Enable A function
             </Switch>
-            <Switch defaultSelected size="sm">
+            <Switch name="switch2" defaultSelected size="sm">
               Enable B function
             </Switch>
-            <Button type="submit" variant="bordered">
+            <Button name="submit" type="submit" variant="bordered">
               Submit
             </Button>
             {submitted && (
