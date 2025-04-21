@@ -31,6 +31,10 @@ interface HistoryResult {
   botCount: number;
 }
 
+interface InputDurations {
+  [fieldName: string]: number[];
+}
+
 export default function Captuchino({
   children,
   status,
@@ -128,9 +132,62 @@ export default function Captuchino({
     }
   }, [mouseLog, setStatus]);
 
+  const [inputDurations, setInputDurations] = useState<InputDurations>({});
+  const lastChangeTimeRef = useRef<Record<string, number>>({});
+  const previousValuesRef = useRef<Record<string, string>>({});
+
+  const handleInputChange = (event: React.FormEvent) => {
+    const target = event.target as HTMLInputElement | HTMLTextAreaElement;
+    const fieldName = target.name || target.id || "unknown";
+
+    const currentTime = Date.now();
+    const lastChangeTime = lastChangeTimeRef.current[fieldName] || currentTime;
+    const previousValue = previousValuesRef.current[fieldName] || "";
+
+    const currentValue = target.value;
+    const newCharacters = currentValue.slice(previousValue.length);
+
+    const durations = Array.from(newCharacters).map(
+      () => currentTime - lastChangeTime
+    );
+
+    setInputDurations((prev) => ({
+      ...prev,
+      [fieldName]: [...(prev[fieldName] || []), ...durations],
+    }));
+
+    lastChangeTimeRef.current[fieldName] = currentTime;
+    previousValuesRef.current[fieldName] = currentValue;
+    console.log(`Input changed: ${target.name} = ${target.value}`);
+    console.log(`Time is : ${durations}`);
+    console.log(`character typed : ${durations.length}`);
+
+    if (durations.length > 1) {
+      console.log("Suspicious!!");
+    }
+  };
+
+  useEffect(() => {
+    const formElement = document.querySelector("form");
+
+    if (formElement) {
+      formElement.addEventListener("input", handleInputChange);
+    }
+
+    return () => {
+      if (formElement) {
+        formElement.removeEventListener("input", handleInputChange);
+      }
+    };
+  }, []);
+
   return (
     <div className="relative flex flex-col">
       <div>
+        <Code>{`Status: ${status}`}</Code>
+        <br />
+        {/* <Code>{`INpur Durations: ${JSON.stringify(inputDurations, null, 2)}`}</Code> */}
+        <br />
         <Code>{`Mouse Position: X: ${mousePosition.x}, Y: ${mousePosition.y}`}</Code>{" "}
         <br />
         <Code>{`Pressed Key: ${pressedKey || "None"}`}</Code>

@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Input,
   Form,
   InputOtp,
   Button,
@@ -12,7 +13,7 @@ import {
 
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
-import Captchino from "@/captuchino/captuchino";
+import Captuchino from "@/captuchino/captuchino";
 export const animals = [
   { key: "cat", label: "Cat" },
   { key: "dog", label: "Dog" },
@@ -57,7 +58,7 @@ export default function FormPage() {
           </span>
           <span className={title({})}> ☕</span>
         </div>
-        <Captchino setStatus={setStatus} status={status}>
+        <Captuchino setStatus={setStatus} status={status}>
           <Form className="w-full max-w-xs" onSubmit={onSubmit}>
             {/* <Input
             isRequired
@@ -68,7 +69,7 @@ export default function FormPage() {
             placeholder="Enter your username"
             type="text"
           />
-          <Input
+          /*<Input
             isRequired
             errorMessage="Please enter a valid email"
             label="Email"
@@ -77,6 +78,12 @@ export default function FormPage() {
             placeholder="Enter your email"
             type="email"
           /> */}
+            <Input
+              className="max-w-xs"
+              label="Full name"
+              labelPlacement="outside"
+              placeholder="Enter your full name"
+            />
             <DatePicker label="Date" labelPlacement="outside" />
             <NumberInput
               className="max-w-xs"
@@ -117,7 +124,7 @@ export default function FormPage() {
               </div>
             )}
           </Form>
-        </Captchino>
+        </Captuchino>
       </section>
     </DefaultLayout>
   );
