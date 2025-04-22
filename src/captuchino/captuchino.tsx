@@ -147,9 +147,9 @@ export default function Captuchino({
     const currentValue = target.value;
     const newCharacters = currentValue.slice(previousValue.length);
 
-    const durations = Array.from(newCharacters).map(
-      () => currentTime - lastChangeTime
-    );
+    const durations = Array.from(newCharacters).map((_, index) => {
+      return currentTime - lastChangeTime + index; // Simulate incremental time for each character
+    });
 
     setInputDurations((prev) => ({
       ...prev,
@@ -160,10 +160,18 @@ export default function Captuchino({
     previousValuesRef.current[fieldName] = currentValue;
     console.log(`Input changed: ${target.name} = ${target.value}`);
     console.log(`Time is : ${durations}`);
-    console.log(`character typed : ${durations.length}`);
+    console.log(`character typed : ${newCharacters}`);
 
-    if (durations.length > 1) {
-      console.log("Suspicious!!");
+    if (newCharacters.length > 1) {
+      setTimeout(() => {
+        setStatus("yes");
+        console.log("suspicious!");
+      }, 30);
+    } else {
+      setTimeout(() => {
+        setStatus("no");
+        console.log("not sus");
+      }, 30);
     }
   };
 
