@@ -13,7 +13,7 @@ export default function SuccessPage() {
         <div className="text-2xl">Success !</div>
         <div className="text-xl">You are human</div>
         <button
-          className="bg-blue-600 w-1/12 h-1/12 rounded-md my-3"
+          className="bg-blue-600 px-5 py-2 rounded-lg my-3"
           onClick={goBack}
         >
           Go back
