@@ -34,6 +34,10 @@ export default function FormPage() {
   const [status, setStatus] = React.useState<"yes" | "no">("no");
   const [submitStatus, setSubmitStatus] = React.useState<"yes" | "no">("no");
 
+  const [fullName, setFullName] = React.useState("");
+  const [date, setDate] = React.useState("");
+  const [otp, setOtp] = React.useState("");
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -84,13 +88,22 @@ export default function FormPage() {
               label="Full name"
               labelPlacement="outside"
               placeholder="Enter your full name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
             />
-            <DatePicker name="date" label="Date" labelPlacement="outside" />
+            <DatePicker
+              name="date"
+              label="Date"
+              labelPlacement="outside"
+              // value={date}
+              // onChange={(value) => setDate(value)}
+            />
             <NumberInput
               name="number"
               className="max-w-xs"
               label="Number"
               labelPlacement="outside"
+              name="number"
               placeholder="Enter the amount"
             />
             <InputOtp
@@ -101,6 +114,8 @@ export default function FormPage() {
               length={7}
               name="otp"
               placeholder="Enter code"
+              // value={otp}
+              // onChange={(value) => setOtp(value)}
             />
             <Select
               name="select"
