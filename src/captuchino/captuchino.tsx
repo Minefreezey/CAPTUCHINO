@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Code } from "@heroui/code";
 
 import { useMouseBotDetector } from "@/botDetection/mouseCoordinates";
+import { InputChange } from "@/botDetection/inputChange";
 
 interface CaptuchinoProps {
   children: React.ReactNode;
@@ -27,6 +28,7 @@ export default function Captuchino({
   status,
   setStatus,
 }: CaptuchinoProps) {
+  const temp: number[] = [];
   const [mousePosition, setMousePosition] = useState<MousePosition>({
     x: 0,
     y: 0,
@@ -55,48 +57,7 @@ export default function Captuchino({
 
   useMouseBotDetector(setStatus); // Call mouse Coordinates function
 
-  const [inputDurations, setInputDurations] = useState<InputDurations>({});
-  const lastChangeTimeRef = useRef<Record<string, number>>({});
-  const previousValuesRef = useRef<Record<string, string>>({});
-
-  const handleInputChange = (event: React.FormEvent) => {
-    const target = event.target as HTMLInputElement | HTMLTextAreaElement;
-    const fieldName = target.name || target.id || "unknown";
-
-    const currentTime = Date.now();
-    const lastChangeTime = lastChangeTimeRef.current[fieldName] || currentTime;
-    const previousValue = previousValuesRef.current[fieldName] || "";
-
-    const currentValue = target.value;
-    const newCharacters = currentValue.slice(previousValue.length);
-
-    const durations = Array.from(newCharacters).map((_, index) => {
-      return currentTime - lastChangeTime + index; // Simulate incremental time for each character
-    });
-
-    setInputDurations((prev) => ({
-      ...prev,
-      [fieldName]: [...(prev[fieldName] || []), ...durations],
-    }));
-
-    lastChangeTimeRef.current[fieldName] = currentTime;
-    previousValuesRef.current[fieldName] = currentValue;
-    console.log(`Input changed: ${target.name} = ${target.value}`);
-    console.log(`Time is : ${durations}`);
-    console.log(`character typed : ${newCharacters}`);
-
-    if (newCharacters.length > 1) {
-      setTimeout(() => {
-        setStatus("yes");
-        console.log("suspicious!");
-      }, 30);
-    } else {
-      setTimeout(() => {
-        setStatus("no");
-        console.log("not sus");
-      }, 30);
-    }
-  };
+  const { inputDurations, handleInputChange } = InputChange(setStatus);
 
   useEffect(() => {
     const formElement = document.querySelector("form");
@@ -110,8 +71,9 @@ export default function Captuchino({
         formElement.removeEventListener("input", handleInputChange);
       }
     };
-  }, []);
-  const getCapturedTime = () => {
+  }, [handleInputChange]);
+
+  const GetCapturedTime = () => {
     const [capturedTime, setCapturedTime] = useState<number>(0);
 
     useEffect(() => {
@@ -119,6 +81,7 @@ export default function Captuchino({
 
       const interval = setInterval(() => {
         const elapsedTime = Date.now() - startTime;
+
         setCapturedTime(elapsedTime);
       }, 1);
 
@@ -128,14 +91,12 @@ export default function Captuchino({
     return capturedTime;
   };
 
-  const capturedTime = getCapturedTime();
+  const capturedTime = GetCapturedTime();
 
   return (
     <div className="relative flex flex-col">
       <div>
         <Code>{`Status: ${status}`}</Code>
-        <br />
-        {/* <Code>{`INpur Durations: ${JSON.stringify(inputDurations, null, 2)}`}</Code> */}
         <br />
         <Code>{`Mouse Position: X: ${mousePosition.x}, Y: ${mousePosition.y}`}</Code>{" "}
         <br />
