@@ -23,15 +23,7 @@ export interface HistoryResult {
   botCount: number;
 }
 
-const MAX_LOG_SIZE = 200;
-const BATCH_SIZE = 50;
-const BOT_RATIO_THRESHOLD = 0.3;
-
 export function MouseMovementDetection(setStatus: (val: "yes" | "no") => void) {
-  const [mousePosition, setMousePosition] = useState<MousePosition>({
-    x: 0,
-    y: 0,
-  });
   const [mouseLog, setMouseLog] = useState<Coordinates[]>([]);
   const [historyResult, setHistoryResult] = useState<HistoryResult>({
     calculateCount: 0,
@@ -39,12 +31,13 @@ export function MouseMovementDetection(setStatus: (val: "yes" | "no") => void) {
   });
 
   const lastTimeRef = useRef<number>(0);
+  const MAX_LOG_SIZE = 200;
+  const BATCH_SIZE = 50;
+  const BOT_RATIO_THRESHOLD = 0.3;
 
   const handleMouseMove = (event: MouseEvent) => {
     const now = Date.now();
     const newMousePosition = { x: event.clientX, y: event.clientY };
-
-    setMousePosition(newMousePosition);
 
     if (now - lastTimeRef.current > 10) {
       setMouseLog((prev) => {
@@ -83,10 +76,6 @@ export function MouseMovementDetection(setStatus: (val: "yes" | "no") => void) {
 
         const isSuspicious = suspicionScore >= 3;
         const newBotCount = prev.botCount + (isSuspicious ? 1 : 0);
-        const botDetectionRatio = newBotCount / newCalculateCount;
-
-        console.log("Bot Detection Ratio:", botDetectionRatio);
-        setStatus(botDetectionRatio > BOT_RATIO_THRESHOLD ? "yes" : "no");
 
         return {
           calculateCount: newCalculateCount,
@@ -94,7 +83,16 @@ export function MouseMovementDetection(setStatus: (val: "yes" | "no") => void) {
         };
       });
     }
-  }, [mouseLog, setStatus]);
+  }, [mouseLog]);
+
+  useEffect(() => {
+    if (historyResult.calculateCount > 0) {
+      const botDetectionRatio =
+        historyResult.botCount / historyResult.calculateCount;
+
+      setStatus(botDetectionRatio > BOT_RATIO_THRESHOLD ? "yes" : "no");
+    }
+  }, [historyResult]);
 }
 
 export const AnalyzeMouseMovement = (
@@ -117,13 +115,16 @@ export const AnalyzeMouseMovement = (
     const t1 = mouseLog[i - 1].time_stamp;
     const t2 = mouseLog[i].time_stamp;
 
-    const distance = Math.hypot(x2 - x1, y2 - y1);
+    const d01 = Math.hypot(x1 - x0, y1 - y0);
+    const d12 = Math.hypot(x2 - x1, y2 - y1);
+    const d02 = Math.hypot(x2 - x0, y2 - y0);
+
     const timeDiff = t2 - t1;
-    const speed = distance / (timeDiff || 1);
+    const speed = d12 / (timeDiff || 1);
 
     speeds.push(speed);
 
-    if (distance < 1 && timeDiff > PAUSE_THRESHOLD_MS) {
+    if (d12 < 1 && timeDiff > PAUSE_THRESHOLD_MS) {
       pauseCount += 1;
     }
 
@@ -148,12 +149,20 @@ export const AnalyzeMouseMovement = (
     }
 
     totalAngularChange += angle;
-    totalCurvature += angle;
+
+    const arcLength = d01 + d12;
+    const chordLength = d02 || 1e-6; // to avoid divide by zero
+    const curvature = arcLength / chordLength;
+
+    totalCurvature += curvature;
   }
 
-  const avgJitter = totalJitter / (mouseLog.length - 2);
-  const avgAngularChange = totalAngularChange / (mouseLog.length - 2);
-  const avgCurvature = totalCurvature / (mouseLog.length - 2);
+  const n = mouseLog.length - 2;
+
+  const avgJitter = totalJitter / n;
+  const avgAngularChange = totalAngularChange / n;
+  const avgCurvature = totalCurvature / n;
+
   const speedMean = speeds.reduce((a, b) => a + b, 0) / speeds.length;
   const speedVariance =
     speeds.reduce((sum, val) => sum + (val - speedMean) ** 2, 0) /
