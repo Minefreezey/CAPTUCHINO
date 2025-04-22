@@ -111,6 +111,24 @@ export default function Captuchino({
       }
     };
   }, []);
+  const getCapturedTime = () => {
+    const [capturedTime, setCapturedTime] = useState<number>(0);
+
+    useEffect(() => {
+      const startTime = Date.now();
+
+      const interval = setInterval(() => {
+        const elapsedTime = Date.now() - startTime;
+        setCapturedTime(elapsedTime);
+      }, 1);
+
+      return () => clearInterval(interval);
+    }, []);
+
+    return capturedTime;
+  };
+
+  const capturedTime = getCapturedTime();
 
   return (
     <div className="relative flex flex-col">
@@ -122,6 +140,8 @@ export default function Captuchino({
         <Code>{`Mouse Position: X: ${mousePosition.x}, Y: ${mousePosition.y}`}</Code>{" "}
         <br />
         <Code>{`Pressed Key: ${pressedKey || "None"}`}</Code>
+        <br />
+        <Code>{`Duration: ${capturedTime || "None"}`}</Code>
       </div>
       <div
         style={{

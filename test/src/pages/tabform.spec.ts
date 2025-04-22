@@ -40,4 +40,31 @@ export class TabFormPage {
         }
         await this.page.keyboard.type(number);
     }
+
+    async fillDate(date: string, rand: boolean) {
+        if (rand) {
+            await this.fillWithRandom(date);
+        }
+        await this.page.keyboard.type(date);
+    }
+    async fillMonth(month: string, rand: boolean) {
+        if (rand) {
+            await this.fillWithRandom(month);
+        }
+        await this.page.keyboard.type(month);
+    }
+    async fillYear(year: string, rand: boolean) {
+        if (rand) {
+            await this.fillWithRandom(year);
+        }
+        await this.page.keyboard.type(year);
+    }
+    async fillOtp(otp: string, rand: boolean) {
+        if (rand) {
+            await this.fillWithRandom(otp);
+        }
+        await this.page.keyboard.type(otp);
+    }
+
+
 }

@@ -16,8 +16,8 @@ export class LocatorFormPage {
         await this.page.goto(this.baseUrl);
     }
 
-    async fillWithRandom(locatorName: string, value: string){
-        for(let i = 0; i < value.length; i++) {
+    async fillWithRandom(locatorName: string, value: string) {
+        for (let i = 0; i < value.length; i++) {
             await this.page.locator(locatorName).first().press(value[i]);
             const random = Math.floor(Math.random() * 200) + 100; // Random delay between 300ms and 2000ms
             await this.page.waitForTimeout(random);
@@ -27,13 +27,13 @@ export class LocatorFormPage {
     async fillFullName(name: string, rand: boolean) {
         if (rand) {
             await this.fillWithRandom(this.locatorFullName, name);
-        }else {
-        await this.page.locator(this.locatorFullName).fill(name);
-        }   
+        } else {
+            await this.page.locator(this.locatorFullName).fill(name);
+        }
     }
 
     async fillNumber(number: string, rand: boolean) {
-        if(rand) {
+        if (rand) {
             await this.fillWithRandom(this.locatorNumber, number);
         }
         await this.page.locator(this.locatorNumber).first().fill(number);
