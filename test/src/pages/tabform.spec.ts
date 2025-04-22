@@ -2,7 +2,7 @@
 import { Page } from "@playwright/test";
 
 export class TabFormPage {
-    baseUrl = "http://localhost:5173/form";
+    baseUrl = "http://localhost:5173";
 
     private page: Page;
 

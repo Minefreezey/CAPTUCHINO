@@ -2,7 +2,7 @@
 import { Page } from "@playwright/test";
 
 export class LocatorFormPage {
-    baseUrl = "http://localhost:5173/form";
+    baseUrl = "http://localhost:5173";
 
     locatorFullName = 'input[name="fullname"]';
     locatorNumber = 'input[name="number"]';
