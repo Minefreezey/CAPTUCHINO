@@ -10,6 +10,7 @@ import {
   DatePicker,
   Switch,
 } from "@heroui/react";
+import { useNavigate } from "react-router-dom";
 
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
@@ -37,6 +38,7 @@ export default function FormPage() {
   const [fullName, setFullName] = React.useState("");
   const [date, setDate] = React.useState("");
   const [otp, setOtp] = React.useState("");
+  const navigate = useNavigate();
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,6 +48,7 @@ export default function FormPage() {
     // setSubmitted(data);
     setSubmitStatus(status);
     console.log("submitted !, status: ", status);
+    navigate(`/${status === "no" ? "success" : "failed"}`);
   };
 
   return (
@@ -83,23 +86,22 @@ export default function FormPage() {
             type="email"
           /> */}
             <Input
-              name="fullname"
               className="max-w-xs"
               label="Full name"
               labelPlacement="outside"
+              name="fullname"
               placeholder="Enter your full name"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
             />
             <DatePicker
-              name="date"
               label="Date"
+              name="date"
               labelPlacement="outside"
               // value={date}
               // onChange={(value) => setDate(value)}
             />
             <NumberInput
-              name="number"
               className="max-w-xs"
               label="Number"
               labelPlacement="outside"
@@ -107,7 +109,6 @@ export default function FormPage() {
               placeholder="Enter the amount"
             />
             <InputOtp
-
               isRequired
               aria-label="OTP input field"
               label="OTP"
@@ -118,20 +119,20 @@ export default function FormPage() {
               // onChange={(value) => setOtp(value)}
             />
             <Select
-              name="select"
               className="max-w-xs"
               label="Favorite Animal"
               labelPlacement="outside"
+              name="select"
               placeholder="Select an animal"
             >
               {animals.map((animal) => (
                 <SelectItem key={animal.key}>{animal.label}</SelectItem>
               ))}
             </Select>
-            <Switch name="switch1" defaultSelected size="sm">
+            <Switch defaultSelected name="switch1" size="sm">
               Enable A function
             </Switch>
-            <Switch name="switch2" defaultSelected size="sm">
+            <Switch defaultSelected name="switch2" size="sm">
               Enable B function
             </Switch>
             <Button name="submit" type="submit" variant="bordered">
