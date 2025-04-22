@@ -5,7 +5,8 @@ interface InputDurations {
 }
 
 export function InputChange(
-  setStatus: React.Dispatch<React.SetStateAction<"yes" | "no">>
+  setStatus: React.Dispatch<React.SetStateAction<"yes" | "no">>,
+  setBotFlag: React.Dispatch<React.SetStateAction<number[]>>
 ) {
   const [inputDurations, setInputDurations] = React.useState<InputDurations>(
     {}
@@ -43,9 +44,19 @@ export function InputChange(
     lastChangeTimeRef.current[fieldName] = currentTime;
     previousValuesRef.current[fieldName] = currentValue;
 
-    console.log(`Input changed: ${target.name} = ${target.value}`);
-    console.log(`Time is : ${durations}`);
-    console.log(`Character typed : ${newCharacters}`);
+    // console.log(`Input changed: ${target.name} = ${target.value}`);
+    // console.log(`Time is : ${durations}`);
+    // console.log(`Character typed : ${newCharacters}`);
+
+    const isSuspicious = newCharacters.length > 2;
+
+    setBotFlag((prev) => {
+      const newFlags = [...prev];
+
+      newFlags[1] = isSuspicious ? 1 : 0;
+
+      return newFlags;
+    });
 
     if (newCharacters.length > 1) {
       setTimeout(() => {

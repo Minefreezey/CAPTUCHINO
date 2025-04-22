@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Code } from "@heroui/code";
+
 import { InputChange } from "@/botDetection/inputChange";
 import { MouseMovementDetection } from "@/botDetection/mouseMovementDetection";
 
@@ -31,7 +32,16 @@ export default function Captuchino({
   submitted,
   setSubmitted,
 }: CaptuchinoProps) {
-  const temp: number[] = [];
+  const [botFlag, setBotFlag] = useState<number[]>([0, 0]);
+
+  useEffect(() => {
+    if ((botFlag[0] === 1 || botFlag[1] === 1) && capturedTime <= 10000) {
+      setStatus("yes");
+      console.log("BOT!");
+    } else {
+      setStatus("no");
+    }
+  });
   const [mousePosition, setMousePosition] = useState<MousePosition>({
     x: 0,
     y: 0,
@@ -58,9 +68,12 @@ export default function Captuchino({
     };
   }, []);
 
-  MouseMovementDetection(setStatus); // Call mouse Coordinates function
+  MouseMovementDetection(setStatus, setBotFlag); // Call mouse Coordinates function
 
-  const { inputDurations, handleInputChange } = InputChange(setStatus);
+  const { inputDurations, handleInputChange } = InputChange(
+    setStatus,
+    setBotFlag
+  );
 
   useEffect(() => {
     const formElement = document.querySelector("form");
