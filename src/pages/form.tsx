@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Input,
   Form,
   InputOtp,
   Button,
@@ -12,7 +13,7 @@ import {
 
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
-import Captchino from "@/captuchino/captuchino";
+import Captuchino from "@/captuchino/captuchino";
 export const animals = [
   { key: "cat", label: "Cat" },
   { key: "dog", label: "Dog" },
@@ -32,6 +33,10 @@ export default function FormPage() {
   const [submitted, setSubmitted] = React.useState(null);
   const [status, setStatus] = React.useState<"yes" | "no">("no");
   const [submitStatus, setSubmitStatus] = React.useState<"yes" | "no">("no");
+
+  const [fullName, setFullName] = React.useState("");
+  const [date, setDate] = React.useState("");
+  const [otp, setOtp] = React.useState("");
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -57,7 +62,7 @@ export default function FormPage() {
           </span>
           <span className={title({})}> ☕</span>
         </div>
-        <Captchino setStatus={setStatus} status={status}>
+        <Captuchino setStatus={setStatus} status={status}>
           <Form className="w-full max-w-xs" onSubmit={onSubmit}>
             {/* <Input
             isRequired
@@ -68,7 +73,7 @@ export default function FormPage() {
             placeholder="Enter your username"
             type="text"
           />
-          <Input
+          /*<Input
             isRequired
             errorMessage="Please enter a valid email"
             label="Email"
@@ -77,22 +82,43 @@ export default function FormPage() {
             placeholder="Enter your email"
             type="email"
           /> */}
-            <DatePicker label="Date" labelPlacement="outside" />
+            <Input
+              name="fullname"
+              className="max-w-xs"
+              label="Full name"
+              labelPlacement="outside"
+              placeholder="Enter your full name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+            />
+            <DatePicker
+              name="date"
+              label="Date"
+              labelPlacement="outside"
+              // value={date}
+              // onChange={(value) => setDate(value)}
+            />
             <NumberInput
+              name="number"
               className="max-w-xs"
               label="Number"
               labelPlacement="outside"
+              name="number"
               placeholder="Enter the amount"
             />
             <InputOtp
+
               isRequired
               aria-label="OTP input field"
               label="OTP"
               length={7}
               name="otp"
               placeholder="Enter code"
+              // value={otp}
+              // onChange={(value) => setOtp(value)}
             />
             <Select
+              name="select"
               className="max-w-xs"
               label="Favorite Animal"
               labelPlacement="outside"
@@ -102,13 +128,13 @@ export default function FormPage() {
                 <SelectItem key={animal.key}>{animal.label}</SelectItem>
               ))}
             </Select>
-            <Switch defaultSelected size="sm">
+            <Switch name="switch1" defaultSelected size="sm">
               Enable A function
             </Switch>
-            <Switch defaultSelected size="sm">
+            <Switch name="switch2" defaultSelected size="sm">
               Enable B function
             </Switch>
-            <Button type="submit" variant="bordered">
+            <Button name="submit" type="submit" variant="bordered">
               Submit
             </Button>
             {submitted && (
@@ -117,7 +143,7 @@ export default function FormPage() {
               </div>
             )}
           </Form>
-        </Captchino>
+        </Captuchino>
       </section>
     </DefaultLayout>
   );
