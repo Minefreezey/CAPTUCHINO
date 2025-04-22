@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Code } from "@heroui/code";
 
-import { AnalyzeMouseMovement } from "@/botDetection/mouseCoordinates";
+import { useMouseBotDetector } from "@/botDetection/mouseCoordinates";
 
 interface CaptuchinoProps {
   children: React.ReactNode;
@@ -18,19 +18,6 @@ interface Coordinates {
   time_stamp: number;
 }
 
-interface AnalyzeMouseResult {
-  avgJitter: number;
-  avgAngularChange: number;
-  speedVariance: number;
-  pauseCount: number;
-  avgCurvature: number;
-}
-
-interface HistoryResult {
-  calculateCount: number;
-  botCount: number;
-}
-
 interface InputDurations {
   [fieldName: string]: number[];
 }
@@ -45,35 +32,11 @@ export default function Captuchino({
     y: 0,
   });
   const [pressedKey, setPressedKey] = useState<string | null>(null);
-  const [mouseLog, setMouseLog] = useState<Coordinates[]>([]);
-  const lastTimeRef = useRef<number>(0);
-  const MAX_LOG_SIZE = 200;
-  const BATCH_SIZE = 50;
-  const [historyResult, setHistoryResult] = useState<HistoryResult>({
-    calculateCount: 0,
-    botCount: 0,
-  });
-  const BOT_RATIO_THRESHOLD = 0.3; // เริ่มต้นประมาณนี้ก่อน
 
   const handleMouseMove = (event: MouseEvent) => {
-    const now = Date.now();
     const newMousePosition = { x: event.clientX, y: event.clientY };
 
     setMousePosition(newMousePosition);
-
-    // Sampling rate of 10ms
-    if (now - lastTimeRef.current > 10) {
-      setMouseLog((prev) => {
-        const newLog = [
-          ...prev,
-          { mousePosition: newMousePosition, time_stamp: now },
-        ];
-
-        return newLog.length > MAX_LOG_SIZE ? newLog.slice(BATCH_SIZE) : newLog;
-      });
-
-      lastTimeRef.current = now;
-    }
   };
 
   useEffect(() => {
@@ -90,47 +53,7 @@ export default function Captuchino({
     };
   }, []);
 
-  const checkForBot = (mouseLog: Coordinates[]): AnalyzeMouseResult => {
-    return AnalyzeMouseMovement(mouseLog);
-  };
-
-  useEffect(() => {
-    if (mouseLog.length >= BATCH_SIZE && mouseLog.length % BATCH_SIZE === 0) {
-      const result = checkForBot(mouseLog);
-
-      setHistoryResult((prev) => {
-        const newCalculateCount = prev.calculateCount + 1;
-
-        // logic ตัดสินใจแบบ multi-dimensional
-        let suspicionScore = 0;
-
-        if (result.avgJitter < 0.0001) suspicionScore++;
-        if (result.avgAngularChange < 0.05) suspicionScore++;
-        if (result.speedVariance < 0.01) suspicionScore++;
-        if (result.pauseCount === 0) suspicionScore++;
-        if (result.avgCurvature < 0.05) suspicionScore++;
-
-        const isSuspicious = suspicionScore >= 3; // 3 จาก 5 ถือว่าน่าสงสัย
-
-        const newBotCount = prev.botCount + (isSuspicious ? 1 : 0);
-        const botDetectionRatio = newBotCount / newCalculateCount;
-
-        console.log("Bot Detection Ratio:", botDetectionRatio);
-        if (botDetectionRatio > BOT_RATIO_THRESHOLD) {
-          setStatus("yes");
-          console.log("set status to: yes");
-        } else {
-          setStatus("no");
-          console.log("set status to: no");
-        }
-
-        return {
-          calculateCount: newCalculateCount,
-          botCount: newBotCount,
-        };
-      });
-    }
-  }, [mouseLog, setStatus]);
+  useMouseBotDetector(setStatus); // Call mouse Coordinates function
 
   const [inputDurations, setInputDurations] = useState<InputDurations>({});
   const lastChangeTimeRef = useRef<Record<string, number>>({});
