@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
 import Captuchino from "@/captuchino/captuchino";
+// Removed unused imports
 export const animals = [
   { key: "cat", label: "Cat" },
   { key: "dog", label: "Dog" },
@@ -30,25 +31,38 @@ export const animals = [
   { key: "otter", label: "Otter" },
   { key: "crocodile", label: "Crocodile" },
 ];
+
 export default function FormPage() {
-  const [submitted, setSubmitted] = React.useState(null);
+  const [submitted, setSubmitted] = React.useState<"yes" | "no">("no");
+  const navigate = useNavigate();
   const [status, setStatus] = React.useState<"yes" | "no">("no");
   const [submitStatus, setSubmitStatus] = React.useState<"yes" | "no">("no");
 
   const [fullName, setFullName] = React.useState("");
   const [date, setDate] = React.useState("");
-  const [otp, setOtp] = React.useState("");
-  const navigate = useNavigate();
+  // Removed unused state variables
+  // setSubmitted("yes");
+
+  React.useEffect(() => {
+    if (submitted === "yes") {
+      const timeout = setTimeout(() => {
+        navigate(status === "no" ? "/success" : "/failed");
+      }, 100); // Delay navigation by 5 seconds
+
+      return () => clearTimeout(timeout); // Cleanup to prevent multiple navigations
+    }
+  }, [submitted, status, navigate]);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const data = Object.fromEntries(new FormData(e.currentTarget));
+    console.log("Before state update, submitted:", submitted);
 
-    // setSubmitted(data);
-    setSubmitStatus(status);
-    console.log("submitted !, status: ", status);
-    navigate(`/${status === "no" ? "success" : "failed"}`);
+    setSubmitted("yes"); // Update the state
+    setSubmitStatus(status); // Update submitStatus
+
+    console.log("After state update, submitted:", submitted);
+
   };
 
   return (
@@ -65,26 +79,8 @@ export default function FormPage() {
           </span>
           <span className={title({})}> ☕</span>
         </div>
-        <Captuchino setStatus={setStatus} status={status}>
+        <Captuchino setStatus={setStatus} status={status} submitted={submitted} setSubmitted={setSubmitted}>
           <Form className="w-full max-w-xs" onSubmit={onSubmit}>
-            {/* <Input
-            isRequired
-            errorMessage="Please enter a valid username"
-            label="Username"
-            labelPlacement="outside"
-            name="username"
-            placeholder="Enter your username"
-            type="text"
-          />
-          /*<Input
-            isRequired
-            errorMessage="Please enter a valid email"
-            label="Email"
-            labelPlacement="outside"
-            name="email"
-            placeholder="Enter your email"
-            type="email"
-          /> */}
             <Input
               className="max-w-xs"
               label="Full name"
@@ -98,8 +94,8 @@ export default function FormPage() {
               label="Date"
               name="date"
               labelPlacement="outside"
-              // value={date}
-              // onChange={(value) => setDate(value)}
+            // value={date}
+            // onChange={(value) => setDate(value)}
             />
             <NumberInput
               className="max-w-xs"
@@ -115,8 +111,8 @@ export default function FormPage() {
               length={7}
               name="otp"
               placeholder="Enter code"
-              // value={otp}
-              // onChange={(value) => setOtp(value)}
+            // value={otp}
+            // onChange={(value) => setOtp(value)}
             />
             <Select
               className="max-w-xs"
@@ -138,9 +134,9 @@ export default function FormPage() {
             <Button name="submit" type="submit" variant="bordered">
               Submit
             </Button>
-            {submitted && (
+            {submitted === "yes" && (
               <div className="text-small text-default-500">
-                You submitted: <code>{JSON.stringify(submitted)}</code>
+                You submitted successfully!
               </div>
             )}
           </Form>
