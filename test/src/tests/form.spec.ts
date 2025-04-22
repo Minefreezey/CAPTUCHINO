@@ -17,7 +17,6 @@ function checkUrl(url: string) {
 }
 
 test.describe("Input by locator", () => {
-    ก
     testCase.forEach((testData) => {
         test.only(`locator typing : ${testData.fullName} `, async ({ page }) => {
             const formPage = new LocatorFormPage(page);
