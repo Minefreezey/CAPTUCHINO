@@ -27,7 +27,7 @@ const MAX_LOG_SIZE = 200;
 const BATCH_SIZE = 50;
 const BOT_RATIO_THRESHOLD = 0.3;
 
-export function useMouseBotDetector(setStatus: (val: "yes" | "no") => void) {
+export function MouseMovementDetection(setStatus: (val: "yes" | "no") => void) {
   const [mousePosition, setMousePosition] = useState<MousePosition>({
     x: 0,
     y: 0,
