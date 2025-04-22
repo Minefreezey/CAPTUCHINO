@@ -7,7 +7,7 @@ interface CaptuchinoProps {
   children: React.ReactNode;
   status: "yes" | "no";
   setStatus: React.Dispatch<React.SetStateAction<"yes" | "no">>;
-  submitted: "yes" | "no"
+  submitted: "yes" | "no";
   setSubmitted: React.Dispatch<React.SetStateAction<"yes" | "no">>;
 }
 interface MousePosition {
@@ -76,7 +76,7 @@ export default function Captuchino({
     };
   }, [handleInputChange]);
 
-  const getCapturedTime = () => {
+  const GetCapturedTime = () => {
     const [capturedTime, setCapturedTime] = useState<number>(0);
 
     useEffect(() => {
@@ -94,16 +94,15 @@ export default function Captuchino({
     return capturedTime;
   };
 
+  const capturedTime = GetCapturedTime();
 
-  const capturedTime = getCapturedTime();
   useEffect(() => {
-    console.log(submitted)
+    console.log(submitted);
     if (submitted === "yes" && capturedTime < 4000) {
       console.log("suspicious!");
       setStatus("yes");
     }
   }, [submitted, capturedTime, setStatus]);
-
 
   return (
     <div className="relative flex flex-col">
@@ -150,4 +149,3 @@ export default function Captuchino({
     </div>
   );
 }
-
