@@ -16,33 +16,33 @@ function checkUrl(url: string) {
     }
 }
 
-// test.describe("Input by locator", () => { ก
-//     testCase.forEach((testData) => {
-//         test.only(`locator typing : ${testData.fullName} `, async ({ page }) => {
-//             const formPage = new LocatorFormPage(page);
+test.describe("Input by locator", () => { ก
+    testCase.forEach((testData) => {
+        test.only(`locator typing : ${testData.fullName} `, async ({ page }) => {
+            const formPage = new LocatorFormPage(page);
 
-//             await formPage.goto();
-//             await formPage.fillFullName(testData.fullName, true);
+            await formPage.goto();
+            await formPage.fillFullName(testData.fullName, true);
 
-//             //wait for 2 sec
-//             await formPage.fillNumber(testData.number, true);
-//         }
-//         )
-//     })
+            //wait for 2 sec
+            await formPage.fillNumber(testData.number, true);
+        }
+        )
+    })
 
-//     testCase.forEach((testData) => {
-//         test.only(`locator paste : ${testData.fullName} `, async ({ page }) => {
-//             const formPage = new LocatorFormPage(page);
+    testCase.forEach((testData) => {
+        test.only(`locator paste : ${testData.fullName} `, async ({ page }) => {
+            const formPage = new LocatorFormPage(page);
 
-//             await formPage.goto();
-//             await formPage.fillFullName(testData.fullName, false);
+            await formPage.goto();
+            await formPage.fillFullName(testData.fullName, false);
 
-//             //wait for 2 sec
-//             await formPage.fillNumber(testData.number, false);
-//         }
-//         )
-//     })
-// })
+            //wait for 2 sec
+            await formPage.fillNumber(testData.number, false);
+        }
+        )
+    })
+})
 
 
 test.describe("Input by tab", () => {

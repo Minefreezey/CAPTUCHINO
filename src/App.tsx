@@ -12,12 +12,7 @@ import SuccessPage from "@/pages/success";
 function App() {
   return (
     <Routes>
-      <Route element={<IndexPage />} path="/" />
-      <Route element={<DocsPage />} path="/docs" />
-      <Route element={<FormPage />} path="/form" />
-      <Route element={<PricingPage />} path="/pricing" />
-      <Route element={<BlogPage />} path="/blog" />
-      <Route element={<AboutPage />} path="/about" />
+      <Route element={<FormPage />} path="/" />
       <Route element={<SuccessPage />} path="/success" />
       <Route element={<FailedPage />} path="/failed" />
     </Routes>
