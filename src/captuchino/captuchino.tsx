@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Code } from "@heroui/code";
-
-import { useMouseBotDetector } from "@/botDetection/mouseCoordinates";
 import { InputChange } from "@/botDetection/inputChange";
+import { MouseMovementDetection } from "@/botDetection/mouseMovementDetection";
 
 interface CaptuchinoProps {
   children: React.ReactNode;
@@ -55,7 +54,7 @@ export default function Captuchino({
     };
   }, []);
 
-  useMouseBotDetector(setStatus); // Call mouse Coordinates function
+  MouseMovementDetection(setStatus); // Call mouse Coordinates function
 
   const { inputDurations, handleInputChange } = InputChange(setStatus);
 
