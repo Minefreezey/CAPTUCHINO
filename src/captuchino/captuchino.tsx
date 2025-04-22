@@ -76,7 +76,7 @@ export default function Captuchino({
     };
   }, [handleInputChange]);
 
-  const GetCapturedTime = () => {
+  const getCapturedTime = () => {
     const [capturedTime, setCapturedTime] = useState<number>(0);
 
     useEffect(() => {
