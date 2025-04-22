@@ -3,8 +3,20 @@ import { LocatorFormPage } from '../pages/locatorform.spec';
 import { TabFormPage } from '../pages/tabform.spec';
 import testCase from '../test-data/testCase';
 
+// import { checkUrl } from '../../utils/utils';
+function checkUrl(url: string) {
+    let newUrl = url;
+    const lastSegment = newUrl.split("/").pop();
+    if (lastSegment === "success") {
+        return false;
+    } else if (lastSegment === "failed") {
+        return true;
+    } else {
+        return false;
+    }
+}
 
-// test.describe("Input by locator", () => {
+// test.describe("Input by locator", () => { ก
 //     testCase.forEach((testData) => {
 //         test.only(`locator typing : ${testData.fullName} `, async ({ page }) => {
 //             const formPage = new LocatorFormPage(page);
@@ -52,6 +64,12 @@ test.describe("Input by tab", () => {
             await formPage.fillNumber(testData.number, true);
             await page.keyboard.press('Tab');
             await formPage.fillOtp(testData.otp, true);
+            await page.keyboard.press('Tab');
+            await page.keyboard.press('Tab');
+            await page.keyboard.press('Tab');
+            await page.keyboard.press('Enter');
+            //wait for 2 sec
+            await page.waitForTimeout(500);
             expect(checkUrl(page.url())).toBe(true);
 
         }
@@ -75,6 +93,11 @@ test.describe("Input by tab", () => {
             await formPage.fillNumber(testData.number, false);
             await page.keyboard.press('Tab');
             await formPage.fillOtp(testData.otp, false);
+            await page.keyboard.press('Tab');
+            await page.keyboard.press('Tab');
+            await page.keyboard.press('Tab');
+            await page.keyboard.press('Enter');
+            await page.waitForTimeout(500);
 
             expect(checkUrl(page.url())).toBe(true);
         }
