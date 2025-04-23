@@ -20,7 +20,7 @@ export function InputChange(
     return sum / values.length;
   };
 
-  const handleInputChange = (event: React.FormEvent) => {
+  const handleInputChange = (event: Event) => {
     const target = event.target as HTMLInputElement | HTMLTextAreaElement;
     const fieldName = target.name || target.id || "unknown";
 

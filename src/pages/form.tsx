@@ -16,6 +16,7 @@ import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
 import Captuchino from "@/captuchino/captuchino";
 // Removed unused imports
+import MouseTracker from "@/mouseTracker/mouseTracker";
 export const animals = [
   { key: "cat", label: "Cat" },
   { key: "dog", label: "Dog" },
@@ -79,9 +80,45 @@ export default function FormPage() {
           </span>
           <span className={title({})}> ☕</span>
         </div>
-        <Captuchino setStatus={setStatus} status={status} submitted={submitted} setSubmitted={setSubmitted}>
+        <Captuchino setStatus={setStatus} status={status}>
+        <MouseTracker />
           <Form className="w-full max-w-xs" onSubmit={onSubmit}>
+            {/* <Input
+              isRequired
+              errorMessage="Please enter a valid password"
+              label="Password"
+              labelPlacement="outside"
+              name="password"
+              placeholder="Enter your password"
+              type="password"
+            {/* <Input
+              isRequired
+              errorMessage="Please enter a valid password"
+              label="Password"
+              labelPlacement="outside"
+              name="password"
+              placeholder="Enter your password"
+              type="password"
+            {/* <Input
+            isRequired
+            errorMessage="Please enter a valid username"
+            label="Username"
+            labelPlacement="outside"
+            name="username"
+            placeholder="Enter your username"
+            type="text"
+          />
+          /*<Input
+            isRequired
+            errorMessage="Please enter a valid email"
+            label="Email"
+            labelPlacement="outside"
+            name="email"
+            placeholder="Enter your email"
+            type="email"
+          /> */}
             <Input
+              id="fullname"
               className="max-w-xs"
               label="Full name"
               labelPlacement="outside"
@@ -91,6 +128,7 @@ export default function FormPage() {
               onChange={(e) => setFullName(e.target.value)}
             />
             <DatePicker
+              id="date"
               label="Date"
               name="date"
               labelPlacement="outside"
@@ -98,6 +136,7 @@ export default function FormPage() {
             // onChange={(value) => setDate(value)}
             />
             <NumberInput
+              id="number"
               className="max-w-xs"
               label="Number"
               labelPlacement="outside"
@@ -105,6 +144,7 @@ export default function FormPage() {
               placeholder="Enter the amount"
             />
             <InputOtp
+              id="otp"
               isRequired
               aria-label="OTP input field"
               label="OTP"
@@ -115,6 +155,7 @@ export default function FormPage() {
             // onChange={(value) => setOtp(value)}
             />
             <Select
+              id="animal"
               className="max-w-xs"
               label="Favorite Animal"
               labelPlacement="outside"
@@ -125,13 +166,13 @@ export default function FormPage() {
                 <SelectItem key={animal.key}>{animal.label}</SelectItem>
               ))}
             </Select>
-            <Switch defaultSelected name="switch1" size="sm">
+            <Switch id="switch1" defaultSelected name="switch1" size="sm">
               Enable A function
             </Switch>
-            <Switch defaultSelected name="switch2" size="sm">
+            <Switch id="switch2" defaultSelected name="switch2" size="sm">
               Enable B function
             </Switch>
-            <Button name="submit" type="submit" variant="bordered">
+            <Button id="button" name="submit" type="submit" variant="bordered">
               Submit
             </Button>
             {submitted === "yes" && (
