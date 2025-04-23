@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Input,
   Form,
@@ -16,7 +16,6 @@ import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
 import Captuchino from "@/captuchino/captuchino";
 // Removed unused imports
-import MouseTracker from "@/mouseTracker/mouseTracker";
 export const animals = [
   { key: "cat", label: "Cat" },
   { key: "dog", label: "Dog" },
@@ -33,16 +32,36 @@ export const animals = [
   { key: "crocodile", label: "Crocodile" },
 ];
 
+interface Data{
+  fullName: string;
+  date: string;
+  number: string;
+  otp: string;
+  animal: string;
+  switch1: boolean;
+  switch2: boolean;
+  button: string;
+}
+
 export default function FormPage() {
   const [submitted, setSubmitted] = React.useState<"yes" | "no">("no");
   const navigate = useNavigate();
   const [status, setStatus] = React.useState<"yes" | "no">("no");
   const [submitStatus, setSubmitStatus] = React.useState<"yes" | "no">("no");
 
-  const [fullName, setFullName] = React.useState("");
-  const [date, setDate] = React.useState("");
+  //const [fullName, setFullName] = React.useState("");
   // Removed unused state variables
   // setSubmitted("yes");
+  const [data, setData] = React.useState<Data>({
+    fullName: '',
+    date: '',
+    number: '',
+    otp: '',
+    animal: '',
+    switch1: false,
+    switch2: false,
+    button: '',
+  });
 
   React.useEffect(() => {
     if (submitted === "yes") {
@@ -66,6 +85,10 @@ export default function FormPage() {
 
   };
 
+  useEffect(() => {
+    console.log("Data updated:", data);
+  }, [data]);
+
   return (
     <DefaultLayout isRobot={submitStatus}>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
@@ -80,43 +103,8 @@ export default function FormPage() {
           </span>
           <span className={title({})}> ☕</span>
         </div>
-        <Captuchino setStatus={setStatus} status={status}>
-        <MouseTracker />
-          <Form className="w-full max-w-xs" onSubmit={onSubmit}>
-            {/* <Input
-              isRequired
-              errorMessage="Please enter a valid password"
-              label="Password"
-              labelPlacement="outside"
-              name="password"
-              placeholder="Enter your password"
-              type="password"
-            {/* <Input
-              isRequired
-              errorMessage="Please enter a valid password"
-              label="Password"
-              labelPlacement="outside"
-              name="password"
-              placeholder="Enter your password"
-              type="password"
-            {/* <Input
-            isRequired
-            errorMessage="Please enter a valid username"
-            label="Username"
-            labelPlacement="outside"
-            name="username"
-            placeholder="Enter your username"
-            type="text"
-          />
-          /*<Input
-            isRequired
-            errorMessage="Please enter a valid email"
-            label="Email"
-            labelPlacement="outside"
-            name="email"
-            placeholder="Enter your email"
-            type="email"
-          /> */}
+        <Captuchino setStatus={setStatus} status={status} submitted={submitted} setSubmitted={setSubmitted} data={data}>
+        <Form className="w-full max-w-xs" onSubmit={onSubmit}>
             <Input
               id="fullname"
               className="max-w-xs"
@@ -124,16 +112,16 @@ export default function FormPage() {
               labelPlacement="outside"
               name="fullname"
               placeholder="Enter your full name"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
+              value={data.fullName} // ใช้ data.fullName
+              onChange={(e) => setData({ ...data, fullName: e.target.value })} // อัปเดต data.fullName
             />
             <DatePicker
               id="date"
               label="Date"
               name="date"
               labelPlacement="outside"
-            // value={date}
-            // onChange={(value) => setDate(value)}
+              //value={data.date} // ใช้ data.date
+              onChange={(date) => setData({ ...data, date: date?.toString() || "" })} // อัปเดต data.date
             />
             <NumberInput
               id="number"
@@ -142,17 +130,20 @@ export default function FormPage() {
               labelPlacement="outside"
               name="number"
               placeholder="Enter the amount"
+              //value={data.number} // ใช้ data.number
+              onChange={(value) => setData({ ...data, number: value.toString() })} // Convert number to string before updating data.number
             />
             <InputOtp
               id="otp"
+              type="text"
               isRequired
               aria-label="OTP input field"
               label="OTP"
               length={7}
               name="otp"
               placeholder="Enter code"
-            // value={otp}
-            // onChange={(value) => setOtp(value)}
+              value={data.otp} // ใช้ data.otp
+              onChange={(e) => setData({ ...data, otp: (e.target as HTMLInputElement).value.toString() })} // อัปเดต data.otp
             />
             <Select
               id="animal"
@@ -161,18 +152,42 @@ export default function FormPage() {
               labelPlacement="outside"
               name="select"
               placeholder="Select an animal"
+              value={data.animal} // ใช้ data.animal
+              onChange={(e) => setData({ ...data, animal: e.target.value })} // อัปเดต data.animal
             >
               {animals.map((animal) => (
-                <SelectItem key={animal.key}>{animal.label}</SelectItem>
+                <SelectItem key={animal.key} data-value={animal.key}>
+                  {animal.label}
+                </SelectItem>
               ))}
             </Select>
-            <Switch id="switch1" defaultSelected name="switch1" size="sm">
+            <Switch
+              id="switch1"
+              type="checkbox"
+              defaultSelected={data.switch1} // ใช้ data.switch1
+              name="switch1"
+              size="sm"
+              onChange={(e) => setData({ ...data, switch1: e.target.checked })} // อัปเดต data.switch1
+            >
               Enable A function
             </Switch>
-            <Switch id="switch2" defaultSelected name="switch2" size="sm">
+            <Switch
+              id="switch2"
+              type="checkbox"
+              defaultSelected={data.switch2} // ใช้ data.switch2
+              name="switch2"
+              size="sm"
+              onChange={(e) => setData({ ...data, switch2: e.target.checked })} // อัปเดต data.switch2
+            >
               Enable B function
             </Switch>
-            <Button id="button" name="submit" type="submit" variant="bordered">
+            <Button
+              id="button"
+              name="submit"
+              type="submit"
+              variant="bordered"
+              onPress={() => setData({ ...data, button: "clicked" })} // อัปเดต data.button
+            >
               Submit
             </Button>
             {submitted === "yes" && (

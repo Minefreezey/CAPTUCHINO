@@ -2,13 +2,26 @@ import React, { useEffect, useState } from "react";
 import { Code } from "@heroui/code";
 import { InputChange } from "@/botDetection/inputChange";
 import { MouseMovementDetection } from "@/botDetection/mouseMovementDetection";
+import { MouseHoverCheck } from "@/mouseTracker/mouseTracker";
+
+interface Data{
+  fullName: string;
+  date: string;
+  number: string;
+  otp: string;
+  animal: string;
+  switch1: boolean;
+  switch2: boolean;
+  button: string;
+}
 
 interface CaptuchinoProps {
   children: React.ReactNode;
   status: "yes" | "no";
   setStatus: React.Dispatch<React.SetStateAction<"yes" | "no">>;
-  submitted: "yes" | "no"
+  submitted: "yes" | "no";
   setSubmitted: React.Dispatch<React.SetStateAction<"yes" | "no">>;
+  data: Data;
 }
 interface MousePosition {
   x: number;
@@ -30,6 +43,7 @@ export default function Captuchino({
   setStatus,
   submitted,
   setSubmitted,
+  data,
 }: CaptuchinoProps) {
   const temp: number[] = [];
   const [mousePosition, setMousePosition] = useState<MousePosition>({
@@ -76,7 +90,7 @@ export default function Captuchino({
     };
   }, [handleInputChange]);
 
-  const getCapturedTime = () => {
+  const GetCapturedTime = () => {
     const [capturedTime, setCapturedTime] = useState<number>(0);
 
     useEffect(() => {
@@ -94,16 +108,15 @@ export default function Captuchino({
     return capturedTime;
   };
 
+  const capturedTime = GetCapturedTime();
 
-  const capturedTime = getCapturedTime();
   useEffect(() => {
-    console.log(submitted)
+    console.log(submitted);
     if (submitted === "yes" && capturedTime < 4000) {
       console.log("suspicious!");
       setStatus("yes");
     }
   }, [submitted, capturedTime, setStatus]);
-
 
   return (
     <div className="relative flex flex-col">
@@ -144,10 +157,10 @@ export default function Captuchino({
           ☕
         </div>
       </div>
+      <MouseHoverCheck data={data}/>
       <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
         {children}
       </main>
     </div>
   );
 }
-
