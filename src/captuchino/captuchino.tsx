@@ -3,6 +3,18 @@ import { Code } from "@heroui/code";
 
 import { InputChange } from "@/botDetection/inputChange";
 import { MouseMovementDetection } from "@/botDetection/mouseMovementDetection";
+import { MouseHoverCheck } from "@/mouseTracker/mouseTracker";
+
+interface Data{
+  fullName: string;
+  date: string;
+  number: string;
+  otp: string;
+  animal: string;
+  switch1: boolean;
+  switch2: boolean;
+  button: string;
+}
 
 interface CaptuchinoProps {
   children: React.ReactNode;
@@ -10,6 +22,7 @@ interface CaptuchinoProps {
   setStatus: React.Dispatch<React.SetStateAction<"yes" | "no">>;
   submitted: "yes" | "no";
   setSubmitted: React.Dispatch<React.SetStateAction<"yes" | "no">>;
+  data: Data;
 }
 interface MousePosition {
   x: number;
@@ -31,6 +44,7 @@ export default function Captuchino({
   setStatus,
   submitted,
   setSubmitted,
+  data,
 }: CaptuchinoProps) {
   const [botFlag, setBotFlag] = useState<number[]>([0, 0]);
 
@@ -156,6 +170,7 @@ export default function Captuchino({
           ☕
         </div>
       </div>
+      <MouseHoverCheck data={data}/>
       <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
         {children}
       </main>
