@@ -73,7 +73,7 @@ export default function Captuchino({
     };
   }, []);
 
-  MouseMovementDetection(setStatus, setBotFlag); // Call mouse Coordinates function
+  MouseMovementDetection(setBotFlag); // Call mouse Coordinates function
 
   const { inputDurations, handleInputChange } = InputChange(
     setStatus,
