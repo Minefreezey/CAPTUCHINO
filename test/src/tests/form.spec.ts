@@ -113,32 +113,121 @@ test.describe("Input by tab", () => {
 });
 
 test.describe("Input by mouse", () => {
-  testCase.forEach((testData, index) => {
-    test.only(`mouse moving : ${testData.fullName} with ${index ? "straight line" : "non-straight line"}`, async ({
+  testCase.forEach((testData) => {
+    test.only(` > mouse moving with straight line with typing : ${testData.fullName}`, async ({
       page,
     }) => {
       const formPage = new MouseMovementFormPage(page);
-      const myBool = index === 1;
 
       await formPage.goto();
-      await formPage.moveto({ x: 0, y: 0 }, { x: 510, y: 450 }, 272, myBool);
+      await formPage.moveto({ x: 0, y: 0 }, { x: 510, y: 450 }, 272, true);
       await formPage.myClick();
-      await formPage.fillWithFullName(testData.fullName, !myBool);
-      await formPage.moveto({ x: 510, y: 450 }, { x: 510, y: 590 }, 56, myBool);
+      await formPage.fillWithFullName(testData.fullName, true);
+      await formPage.moveto({ x: 510, y: 450 }, { x: 510, y: 590 }, 56, true);
       await formPage.myClick();
-      await formPage.fillWithNumber(testData.number, !myBool);
-      await formPage.moveto({ x: 510, y: 590 }, { x: 510, y: 650 }, 24, myBool);
+      await formPage.fillWithNumber(testData.number, true);
+      await formPage.moveto({ x: 510, y: 590 }, { x: 510, y: 650 }, 24, true);
       await formPage.myClick();
-      await formPage.fillWithOtp(testData.otp, !myBool);
+      await formPage.fillWithOtp(testData.otp, true);
       await page.waitForTimeout(1200);
       await formPage.scrollWindow();
-      await formPage.moveto({ x: 510, y: 650 }, { x: 510, y: 580 }, 28, myBool);
+      await formPage.moveto({ x: 510, y: 650 }, { x: 510, y: 580 }, 28, true);
       await formPage.myClick();
       await page.waitForTimeout(1000);
-      await formPage.moveto({ x: 510, y: 580 }, { x: 510, y: 610 }, 12, myBool);
+      await formPage.moveto({ x: 510, y: 580 }, { x: 510, y: 610 }, 12, true);
       await formPage.myClick();
       await page.waitForTimeout(1000);
-      await formPage.moveto({ x: 510, y: 610 }, { x: 510, y: 650 }, 16, myBool);
+      await formPage.moveto({ x: 510, y: 610 }, { x: 510, y: 650 }, 16, true);
+      await formPage.myClick();
+      await page.waitForTimeout(500);
+
+      expect(checkUrl(page.url())).toBe(true);
+    });
+
+    test.only(` > mouse moving with non-straight line with typing : ${testData.fullName}`, async ({
+      page,
+    }) => {
+      const formPage = new MouseMovementFormPage(page);
+
+      await formPage.goto();
+      await formPage.moveto({ x: 0, y: 0 }, { x: 510, y: 450 }, 272, false);
+      await formPage.myClick();
+      await formPage.fillWithFullName(testData.fullName, true);
+      await formPage.moveto({ x: 510, y: 450 }, { x: 510, y: 590 }, 56, false);
+      await formPage.myClick();
+      await formPage.fillWithNumber(testData.number, true);
+      await formPage.moveto({ x: 510, y: 590 }, { x: 510, y: 650 }, 24, false);
+      await formPage.myClick();
+      await formPage.fillWithOtp(testData.otp, true);
+      await page.waitForTimeout(1200);
+      await formPage.scrollWindow();
+      await formPage.moveto({ x: 510, y: 650 }, { x: 510, y: 580 }, 28, false);
+      await formPage.myClick();
+      await page.waitForTimeout(1000);
+      await formPage.moveto({ x: 510, y: 580 }, { x: 510, y: 610 }, 12, false);
+      await formPage.myClick();
+      await page.waitForTimeout(1000);
+      await formPage.moveto({ x: 510, y: 610 }, { x: 510, y: 650 }, 16, false);
+      await formPage.myClick();
+      await page.waitForTimeout(500);
+
+      expect(checkUrl(page.url())).toBe(true);
+    });
+
+    test.only(` > mouse moving with non-straight line with copy-paste : ${testData.fullName}`, async ({
+      page,
+    }) => {
+      const formPage = new MouseMovementFormPage(page);
+
+      await formPage.goto();
+      await formPage.moveto({ x: 0, y: 0 }, { x: 510, y: 450 }, 272, false);
+      await formPage.myClick();
+      await formPage.fillWithFullName(testData.fullName, false);
+      await formPage.moveto({ x: 510, y: 450 }, { x: 510, y: 590 }, 56, false);
+      await formPage.myClick();
+      await formPage.fillWithNumber(testData.number, false);
+      await formPage.moveto({ x: 510, y: 590 }, { x: 510, y: 650 }, 24, false);
+      await formPage.myClick();
+      await formPage.fillWithOtp(testData.otp, false);
+      await page.waitForTimeout(1200);
+      await formPage.scrollWindow();
+      await formPage.moveto({ x: 510, y: 650 }, { x: 510, y: 580 }, 28, false);
+      await formPage.myClick();
+      await page.waitForTimeout(1000);
+      await formPage.moveto({ x: 510, y: 580 }, { x: 510, y: 610 }, 12, false);
+      await formPage.myClick();
+      await page.waitForTimeout(1000);
+      await formPage.moveto({ x: 510, y: 610 }, { x: 510, y: 650 }, 16, false);
+      await formPage.myClick();
+      await page.waitForTimeout(500);
+
+      expect(checkUrl(page.url())).toBe(true);
+    });
+
+    test.only(` > mouse moving with straight line with copy-paste : ${testData.fullName}`, async ({
+      page,
+    }) => {
+      const formPage = new MouseMovementFormPage(page);
+
+      await formPage.goto();
+      await formPage.moveto({ x: 0, y: 0 }, { x: 510, y: 450 }, 272, true);
+      await formPage.myClick();
+      await formPage.fillWithFullName(testData.fullName, false);
+      await formPage.moveto({ x: 510, y: 450 }, { x: 510, y: 590 }, 56, true);
+      await formPage.myClick();
+      await formPage.fillWithNumber(testData.number, false);
+      await formPage.moveto({ x: 510, y: 590 }, { x: 510, y: 650 }, 24, true);
+      await formPage.myClick();
+      await formPage.fillWithOtp(testData.otp, false);
+      await page.waitForTimeout(1200);
+      await formPage.scrollWindow();
+      await formPage.moveto({ x: 510, y: 650 }, { x: 510, y: 580 }, 28, true);
+      await formPage.myClick();
+      await page.waitForTimeout(1000);
+      await formPage.moveto({ x: 510, y: 580 }, { x: 510, y: 610 }, 12, true);
+      await formPage.myClick();
+      await page.waitForTimeout(1000);
+      await formPage.moveto({ x: 510, y: 610 }, { x: 510, y: 650 }, 16, true);
       await formPage.myClick();
       await page.waitForTimeout(500);
 
