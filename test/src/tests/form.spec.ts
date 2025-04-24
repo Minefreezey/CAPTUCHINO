@@ -17,7 +17,7 @@ function checkUrl(url: string) {
 }
 
 test.describe("Input by locator", () => {
-    ก
+
     testCase.forEach((testData) => {
         test.only(`locator typing : ${testData.fullName} `, async ({ page }) => {
             const formPage = new LocatorFormPage(page);
@@ -27,6 +27,12 @@ test.describe("Input by locator", () => {
 
             //wait for 2 sec
             await formPage.fillNumber(testData.number, true);
+            await formPage.fillOtp(testData.otp, true);
+
+            await page.click('button[type="submit"]');
+            await page.waitForTimeout(500);
+            expect(checkUrl(page.url())).toBe(true);
+
         }
         )
     })
@@ -40,6 +46,11 @@ test.describe("Input by locator", () => {
 
             //wait for 2 sec
             await formPage.fillNumber(testData.number, false);
+            await formPage.fillOtp(testData.otp, false);
+
+            await page.click('button[type="submit"]');
+            await page.waitForTimeout(500);
+            expect(checkUrl(page.url())).toBe(true);
         }
         )
     })

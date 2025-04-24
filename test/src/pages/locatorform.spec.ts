@@ -6,6 +6,7 @@ export class LocatorFormPage {
 
     locatorFullName = 'input[name="fullname"]';
     locatorNumber = 'input[name="number"]';
+    locatorOpt = 'input[name="otp"]';
     private page: Page;
 
     constructor(page: Page) {
@@ -35,7 +36,17 @@ export class LocatorFormPage {
     async fillNumber(number: string, rand: boolean) {
         if (rand) {
             await this.fillWithRandom(this.locatorNumber, number);
+        } else {
+            await this.page.locator(this.locatorNumber).first().fill(number);
         }
-        await this.page.locator(this.locatorNumber).first().fill(number);
+
+    }
+
+    async fillOtp(otp: string, rand: boolean) {
+        if (rand) {
+            await this.fillWithRandom(this.locatorOpt, otp);
+        } else {
+            await this.page.locator(this.locatorOpt).first().fill(otp);
+        }
     }
 }
