@@ -19,88 +19,98 @@ function checkUrl(url: string) {
   }
 }
 
-// test.describe("Input by locator", () => {
-//   testCase.forEach((testData) => {
-//     test.only(`locator typing : ${testData.fullName} `, async ({ page }) => {
-//       const formPage = new LocatorFormPage(page);
+test.describe("Input by locator", () => {
+  testCase.forEach((testData) => {
+    test.only(`locator typing : ${testData.fullName} `, async ({ page }) => {
+      const formPage = new LocatorFormPage(page);
 
-//       await formPage.goto();
-//       await formPage.fillFullName(testData.fullName, true);
+      await formPage.goto();
+      await formPage.fillFullName(testData.fullName, true);
 
-//       //wait for 2 sec
-//       await formPage.fillNumber(testData.number, true);
-//     });
-//   });
+      //wait for 2 sec
+      await formPage.fillNumber(testData.number, true);
+      await formPage.fillOtp(testData.otp, true);
 
-//   testCase.forEach((testData) => {
-//     test.only(`locator paste : ${testData.fullName} `, async ({ page }) => {
-//       const formPage = new LocatorFormPage(page);
+      await page.click('button[type="submit"]');
+      await page.waitForTimeout(500);
+      expect(checkUrl(page.url())).toBe(true);
+    });
+  });
 
-//       await formPage.goto();
-//       await formPage.fillFullName(testData.fullName, false);
+  testCase.forEach((testData) => {
+    test.only(`locator paste : ${testData.fullName} `, async ({ page }) => {
+      const formPage = new LocatorFormPage(page);
 
-//       //wait for 2 sec
-//       await formPage.fillNumber(testData.number, false);
-//     });
-//   });
-// });
+      await formPage.goto();
+      await formPage.fillFullName(testData.fullName, false);
 
-// test.describe("Input by tab", () => {
-//   testCase.forEach((testData) => {
-//     test.only(`tab typing : ${testData.fullName} `, async ({ page }) => {
-//       const formPage = new TabFormPage(page);
+      //wait for 2 sec
+      await formPage.fillNumber(testData.number, false);
+      await formPage.fillOtp(testData.otp, false);
 
-//       await formPage.goto();
-//       await formPage.firstClick();
-//       await formPage.fillFullName(testData.fullName, true);
-//       await page.keyboard.press("Tab");
-//       await formPage.fillMonth(testData.month, true);
-//       await formPage.fillDate(testData.date, true);
-//       await formPage.fillYear(testData.year, true);
-//       await page.keyboard.press("Tab");
-//       await page.keyboard.press("Tab");
+      await page.click('button[type="submit"]');
+      await page.waitForTimeout(500);
+      expect(checkUrl(page.url())).toBe(true);
+    });
+  });
+});
 
-//       //wait for 2 sec
-//       await formPage.fillNumber(testData.number, true);
-//       await page.keyboard.press("Tab");
-//       await formPage.fillOtp(testData.otp, true);
-//       await page.keyboard.press("Tab");
-//       await page.keyboard.press("Tab");
-//       await page.keyboard.press("Tab");
-//       await page.keyboard.press("Enter");
-//       //wait for 2 sec
-//       await page.waitForTimeout(500);
-//       expect(checkUrl(page.url())).toBe(true);
-//     });
-//   });
+test.describe("Input by tab", () => {
+  testCase.forEach((testData) => {
+    test.only(`tab typing : ${testData.fullName} `, async ({ page }) => {
+      const formPage = new TabFormPage(page);
 
-//   testCase.forEach((testData) => {
-//     test.only(`tab paste : ${testData.fullName} `, async ({ page }) => {
-//       const formPage = new TabFormPage(page);
+      await formPage.goto();
+      await formPage.firstClick();
+      await formPage.fillFullName(testData.fullName, true);
+      await page.keyboard.press("Tab");
+      await formPage.fillMonth(testData.month, true);
+      await formPage.fillDate(testData.date, true);
+      await formPage.fillYear(testData.year, true);
+      await page.keyboard.press("Tab");
+      await page.keyboard.press("Tab");
 
-//       await formPage.goto();
-//       await formPage.firstClick();
-//       await formPage.fillFullName(testData.fullName, false);
-//       await page.keyboard.press("Tab");
-//       await formPage.fillMonth(testData.month, false);
-//       await formPage.fillDate(testData.date, false);
-//       await formPage.fillYear(testData.year, false);
-//       await page.keyboard.press("Tab");
-//       await page.keyboard.press("Tab");
-//       //wait for 2 sec
-//       await formPage.fillNumber(testData.number, false);
-//       await page.keyboard.press("Tab");
-//       await formPage.fillOtp(testData.otp, false);
-//       await page.keyboard.press("Tab");
-//       await page.keyboard.press("Tab");
-//       await page.keyboard.press("Tab");
-//       await page.keyboard.press("Enter");
-//       await page.waitForTimeout(500);
+      //wait for 2 sec
+      await formPage.fillNumber(testData.number, true);
+      await page.keyboard.press("Tab");
+      await formPage.fillOtp(testData.otp, true);
+      await page.keyboard.press("Tab");
+      await page.keyboard.press("Tab");
+      await page.keyboard.press("Tab");
+      await page.keyboard.press("Enter");
+      //wait for 2 sec
+      await page.waitForTimeout(500);
+      expect(checkUrl(page.url())).toBe(true);
+    });
+  });
 
-//       expect(checkUrl(page.url())).toBe(true);
-//     });
-//   });
-// });
+  testCase.forEach((testData) => {
+    test.only(`tab paste : ${testData.fullName} `, async ({ page }) => {
+      const formPage = new TabFormPage(page);
+
+      await formPage.goto();
+      await formPage.firstClick();
+      await formPage.fillFullName(testData.fullName, false);
+      await page.keyboard.press("Tab");
+      await formPage.fillMonth(testData.month, false);
+      await formPage.fillDate(testData.date, false);
+      await formPage.fillYear(testData.year, false);
+      await page.keyboard.press("Tab");
+      await page.keyboard.press("Tab");
+      //wait for 2 sec
+      await formPage.fillNumber(testData.number, false);
+      await page.keyboard.press("Tab");
+      await formPage.fillOtp(testData.otp, false);
+      await page.keyboard.press("Tab");
+      await page.keyboard.press("Tab");
+      await page.keyboard.press("Tab");
+      await page.keyboard.press("Enter");
+      await page.waitForTimeout(500);
+
+      expect(checkUrl(page.url())).toBe(true);
+    });
+  });
+});
 
 test.describe("Input by mouse", () => {
   testCase.forEach((testData, index) => {
@@ -112,7 +122,6 @@ test.describe("Input by mouse", () => {
 
       await formPage.goto();
       await formPage.moveto({ x: 0, y: 0 }, { x: 510, y: 450 }, 272, myBool);
-    //   await formPage.moveto({ x: 510, y: 0 }, { x: 510, y: 450 }, 90, myBool);
       await formPage.myClick();
       await formPage.fillWithFullName(testData.fullName, !myBool);
       await formPage.moveto({ x: 510, y: 450 }, { x: 510, y: 590 }, 56, myBool);
