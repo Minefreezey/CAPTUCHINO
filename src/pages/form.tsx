@@ -105,7 +105,6 @@ export default function FormPage() {
         <Captuchino
           data={data}
           setStatus={setStatus}
-          setSubmitted={setSubmitted}
           status={status}
           submitted={submitted}
         >

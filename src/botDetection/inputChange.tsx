@@ -6,10 +6,10 @@ interface InputDurations {
 
 export function InputChange(
   setStatus: React.Dispatch<React.SetStateAction<"yes" | "no">>,
-  setBotFlag: React.Dispatch<React.SetStateAction<number[]>>
+  setBotFlag: React.Dispatch<React.SetStateAction<number[]>>,
 ) {
   const [inputDurations, setInputDurations] = React.useState<InputDurations>(
-    {}
+    {},
   );
   const lastChangeTimeRef = React.useRef<Record<string, number>>({});
   const previousValuesRef = React.useRef<Record<string, string>>({});

@@ -21,7 +21,6 @@ interface CaptuchinoProps {
   status: "yes" | "no";
   setStatus: React.Dispatch<React.SetStateAction<"yes" | "no">>;
   submitted: "yes" | "no";
-  setSubmitted: React.Dispatch<React.SetStateAction<"yes" | "no">>;
   data: Data;
 }
 interface MousePosition {
@@ -29,21 +28,11 @@ interface MousePosition {
   y: number;
 }
 
-interface Coordinates {
-  mousePosition: MousePosition;
-  time_stamp: number;
-}
-
-interface InputDurations {
-  [fieldName: string]: number[];
-}
-
 export default function Captuchino({
   children,
   status,
   setStatus,
   submitted,
-  setSubmitted,
   data,
 }: CaptuchinoProps) {
   const [botFlag, setBotFlag] = useState<number[]>([0, 0, 0]);
@@ -88,7 +77,7 @@ export default function Captuchino({
 
   const { inputDurations, handleInputChange } = InputChange(
     setStatus,
-    setBotFlag
+    setBotFlag,
   );
 
   useEffect(() => {
