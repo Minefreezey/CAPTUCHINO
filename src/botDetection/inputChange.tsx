@@ -5,7 +5,8 @@ interface InputDurations {
 }
 
 export function InputChange(
-  setStatus: React.Dispatch<React.SetStateAction<"yes" | "no">>
+  setStatus: React.Dispatch<React.SetStateAction<"yes" | "no">>,
+  setBotFlag: React.Dispatch<React.SetStateAction<number[]>>
 ) {
   const [inputDurations, setInputDurations] = React.useState<InputDurations>(
     {}
@@ -20,7 +21,7 @@ export function InputChange(
     return sum / values.length;
   };
 
-  const handleInputChange = (event: React.FormEvent) => {
+  const handleInputChange = (event: Event) => {
     const target = event.target as HTMLInputElement | HTMLTextAreaElement;
     const fieldName = target.name || target.id || "unknown";
 
@@ -43,21 +44,33 @@ export function InputChange(
     lastChangeTimeRef.current[fieldName] = currentTime;
     previousValuesRef.current[fieldName] = currentValue;
 
-    console.log(`Input changed: ${target.name} = ${target.value}`);
-    console.log(`Time is : ${durations}`);
-    console.log(`Character typed : ${newCharacters}`);
+    // console.log(`Input changed: ${target.name} = ${target.value}`);
+    // console.log(`Time is : ${durations}`);
+    // console.log(`Character typed : ${newCharacters}`);
 
-    if (newCharacters.length > 1) {
-      setTimeout(() => {
-        setStatus("yes");
-        console.log("Suspicious!");
-      }, 30);
-    } else {
-      setTimeout(() => {
-        setStatus("no");
-        console.log("Not suspicious");
-      }, 30);
-    }
+    const isSuspicious = newCharacters.length > 2;
+
+    setBotFlag((prev) => {
+      const newFlags = [...prev];
+
+      if (isSuspicious) {
+        newFlags[1] = 1;
+      }
+
+      return newFlags;
+    });
+
+    // if (newCharacters.length > 1) {
+    //   setTimeout(() => {
+    //     setStatus("yes");
+    //     console.log("Suspicious!");
+    //   }, 30);
+    // } else {
+    //   setTimeout(() => {
+    //     setStatus("no");
+    //     console.log("Not suspicious");
+    //   }, 30);
+    // }
   };
 
   return { inputDurations, handleInputChange };

@@ -23,7 +23,10 @@ export interface HistoryResult {
   botCount: number;
 }
 
-export function MouseMovementDetection(setStatus: (val: "yes" | "no") => void) {
+export function MouseMovementDetection(
+  setStatus: (val: "yes" | "no") => void,
+  setBotFlag: React.Dispatch<React.SetStateAction<number[]>>
+) {
   const [mouseLog, setMouseLog] = useState<Coordinates[]>([]);
   const [historyResult, setHistoryResult] = useState<HistoryResult>({
     calculateCount: 0,
@@ -77,6 +80,14 @@ export function MouseMovementDetection(setStatus: (val: "yes" | "no") => void) {
         const isSuspicious = suspicionScore >= 3;
         const newBotCount = prev.botCount + (isSuspicious ? 1 : 0);
 
+        setBotFlag((prev) => {
+          const newFlags = [...prev];
+
+          newFlags[0] = isSuspicious ? 1 : 0;
+
+          return newFlags;
+        });
+
         return {
           calculateCount: newCalculateCount,
           botCount: newBotCount,
@@ -90,13 +101,13 @@ export function MouseMovementDetection(setStatus: (val: "yes" | "no") => void) {
       const botDetectionRatio =
         historyResult.botCount / historyResult.calculateCount;
 
-      setStatus(botDetectionRatio > BOT_RATIO_THRESHOLD ? "yes" : "no");
+      // setStatus(botDetectionRatio > BOT_RATIO_THRESHOLD ? "yes" : "no");
     }
   }, [historyResult]);
 }
 
 export const AnalyzeMouseMovement = (
-  mouseLog: Coordinates[],
+  mouseLog: Coordinates[]
 ): AnalyzeMouseResult => {
   let totalJitter = 0;
   let totalAngularChange = 0;
@@ -144,7 +155,7 @@ export const AnalyzeMouseMovement = (
 
     if (magV1 > 0 && magV2 > 0) {
       angle = Math.acos(
-        Math.max(-1, Math.min(1, dotProduct / (magV1 * magV2))),
+        Math.max(-1, Math.min(1, dotProduct / (magV1 * magV2)))
       );
     }
 

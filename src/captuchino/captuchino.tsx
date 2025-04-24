@@ -1,14 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { Code } from "@heroui/code";
+
 import { InputChange } from "@/botDetection/inputChange";
 import { MouseMovementDetection } from "@/botDetection/mouseMovementDetection";
+import { MouseHoverCheck } from "@/botDetection/mouseTracker";
+
+interface Data {
+  fullName: string;
+  date: string;
+  number: string;
+  otp: string;
+  animal: string;
+  switch1: boolean;
+  switch2: boolean;
+  button: string;
+}
 
 interface CaptuchinoProps {
   children: React.ReactNode;
   status: "yes" | "no";
   setStatus: React.Dispatch<React.SetStateAction<"yes" | "no">>;
-  submitted: "yes" | "no"
+  submitted: "yes" | "no";
   setSubmitted: React.Dispatch<React.SetStateAction<"yes" | "no">>;
+  data: Data;
 }
 interface MousePosition {
   x: number;
@@ -30,8 +44,20 @@ export default function Captuchino({
   setStatus,
   submitted,
   setSubmitted,
+  data,
 }: CaptuchinoProps) {
-  const temp: number[] = [];
+  const [botFlag, setBotFlag] = useState<number[]>([0, 0, 0]);
+  const THRESHOLD = 2;
+
+  useEffect(() => {
+    const suspiciousCount = botFlag.reduce((count, flag) => count + flag, 0);
+
+    if (suspiciousCount >= THRESHOLD) {
+      setStatus("yes");
+    } else {
+      setStatus("no");
+    }
+  }, [botFlag, setStatus]);
   const [mousePosition, setMousePosition] = useState<MousePosition>({
     x: 0,
     y: 0,
@@ -58,9 +84,12 @@ export default function Captuchino({
     };
   }, []);
 
-  MouseMovementDetection(setStatus); // Call mouse Coordinates function
+  MouseMovementDetection(setStatus, setBotFlag); // Call mouse Coordinates function
 
-  const { inputDurations, handleInputChange } = InputChange(setStatus);
+  const { inputDurations, handleInputChange } = InputChange(
+    setStatus,
+    setBotFlag
+  );
 
   useEffect(() => {
     const formElement = document.querySelector("form");
@@ -76,7 +105,7 @@ export default function Captuchino({
     };
   }, [handleInputChange]);
 
-  const getCapturedTime = () => {
+  const GetCapturedTime = () => {
     const [capturedTime, setCapturedTime] = useState<number>(0);
 
     useEffect(() => {
@@ -94,21 +123,22 @@ export default function Captuchino({
     return capturedTime;
   };
 
+  const capturedTime = GetCapturedTime();
 
-  const capturedTime = getCapturedTime();
   useEffect(() => {
-    console.log(submitted)
+    console.log(submitted);
     if (submitted === "yes" && capturedTime < 4000) {
       console.log("suspicious!");
       setStatus("yes");
     }
   }, [submitted, capturedTime, setStatus]);
 
-
   return (
     <div className="relative flex flex-col">
       <div>
         <Code>{`Status: ${status}`}</Code>
+        <br />
+        <Code>{`Flag: ${botFlag}`}</Code>
         <br />
         <Code>{`Mouse Position: X: ${mousePosition.x}, Y: ${mousePosition.y}`}</Code>{" "}
         <br />
@@ -144,10 +174,10 @@ export default function Captuchino({
           ☕
         </div>
       </div>
+      <MouseHoverCheck data={data} setBotFlag={setBotFlag} />
       <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
         {children}
       </main>
     </div>
   );
 }
-
