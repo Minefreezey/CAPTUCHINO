@@ -3,7 +3,7 @@ import { Code } from "@heroui/code";
 
 import { InputChange } from "@/botDetection/inputChange";
 import { MouseMovementDetection } from "@/botDetection/mouseMovementDetection";
-import { MouseHoverCheck } from "@/mouseTracker/mouseTracker";
+import { MouseHoverCheck } from "@/botDetection/mouseTracker";
 
 interface Data{
   fullName: string;
@@ -46,7 +46,7 @@ export default function Captuchino({
   setSubmitted,
   data,
 }: CaptuchinoProps) {
-  const [botFlag, setBotFlag] = useState<number[]>([0, 0]);
+  const [botFlag, setBotFlag] = useState<number[]>([0, 0, 0]);
 
   useEffect(() => {
     if ((botFlag[0] === 1 || botFlag[1] === 1) && capturedTime <= 10000) {
