@@ -5,7 +5,7 @@ import { InputChange } from "@/botDetection/inputChange";
 import { MouseMovementDetection } from "@/botDetection/mouseMovementDetection";
 import { MouseHoverCheck } from "@/botDetection/mouseTracker";
 
-interface Data{
+interface Data {
   fullName: string;
   date: string;
   number: string;
@@ -47,15 +47,17 @@ export default function Captuchino({
   data,
 }: CaptuchinoProps) {
   const [botFlag, setBotFlag] = useState<number[]>([0, 0, 0]);
+  const THRESHOLD = 2;
 
   useEffect(() => {
-    if ((botFlag[0] === 1 || botFlag[1] === 1) && capturedTime <= 10000) {
+    const suspiciousCount = botFlag.reduce((count, flag) => count + flag, 0);
+
+    if (suspiciousCount >= THRESHOLD) {
       setStatus("yes");
-      console.log("BOT!");
     } else {
       setStatus("no");
     }
-  });
+  }, [botFlag, setStatus]);
   const [mousePosition, setMousePosition] = useState<MousePosition>({
     x: 0,
     y: 0,
@@ -136,6 +138,8 @@ export default function Captuchino({
       <div>
         <Code>{`Status: ${status}`}</Code>
         <br />
+        <Code>{`Flag: ${botFlag}`}</Code>
+        <br />
         <Code>{`Mouse Position: X: ${mousePosition.x}, Y: ${mousePosition.y}`}</Code>{" "}
         <br />
         <Code>{`Pressed Key: ${pressedKey || "None"}`}</Code>
@@ -170,7 +174,7 @@ export default function Captuchino({
           ☕
         </div>
       </div>
-      <MouseHoverCheck data={data}/>
+      <MouseHoverCheck data={data} setBotFlag={setBotFlag} />
       <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
         {children}
       </main>

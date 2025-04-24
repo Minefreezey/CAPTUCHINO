@@ -32,7 +32,7 @@ export const animals = [
   { key: "crocodile", label: "Crocodile" },
 ];
 
-interface Data{
+interface Data {
   fullName: string;
   date: string;
   number: string;
@@ -53,14 +53,14 @@ export default function FormPage() {
   // Removed unused state variables
   // setSubmitted("yes");
   const [data, setData] = React.useState<Data>({
-    fullName: '',
-    date: '',
-    number: '',
-    otp: '',
-    animal: '',
+    fullName: "",
+    date: "",
+    number: "",
+    otp: "",
+    animal: "",
     switch1: false,
     switch2: false,
-    button: '',
+    button: "",
   });
 
   React.useEffect(() => {
@@ -82,7 +82,6 @@ export default function FormPage() {
     setSubmitStatus(status); // Update submitStatus
 
     console.log("After state update, submitted:", submitted);
-
   };
 
   useEffect(() => {
@@ -103,11 +102,17 @@ export default function FormPage() {
           </span>
           <span className={title({})}> ☕</span>
         </div>
-        <Captuchino setStatus={setStatus} status={status} submitted={submitted} setSubmitted={setSubmitted} data={data}>
-        <Form className="w-full max-w-xs" onSubmit={onSubmit}>
+        <Captuchino
+          data={data}
+          setStatus={setStatus}
+          setSubmitted={setSubmitted}
+          status={status}
+          submitted={submitted}
+        >
+          <Form className="w-full max-w-xs" onSubmit={onSubmit}>
             <Input
-              id="fullname"
               className="max-w-xs"
+              id="fullname"
               label="Full name"
               labelPlacement="outside"
               name="fullname"
@@ -121,33 +126,39 @@ export default function FormPage() {
               name="date"
               labelPlacement="outside"
               //value={data.date} // ใช้ data.date
-              onChange={(date) => setData({ ...data, date: date?.toString() || "" })} // อัปเดต data.date
+              onChange={(date) =>
+                setData({ ...data, date: date?.toString() || "" })
+              } // อัปเดต data.date
             />
             <NumberInput
-              id="number"
               className="max-w-xs"
+              id="number"
               label="Number"
               labelPlacement="outside"
               name="number"
               placeholder="Enter the amount"
               //value={data.number} // ใช้ data.number
-              onChange={(value) => setData({ ...data, number: value.toString() })} // Convert number to string before updating data.number
+              onChange={(value) =>
+                setData({ ...data, number: value.toString() })
+              } // Convert number to string before updating data.number
             />
             <InputOtp
-              id="otp"
-              type="text"
               isRequired
               aria-label="OTP input field"
+              id="otp"
               label="OTP"
               length={7}
               name="otp"
               placeholder="Enter code"
+              type="text"
               value={data.otp} // ใช้ data.otp
-              onChange={(e) => setData({ ...data, otp: (e.target as HTMLInputElement).value.toString() })} // อัปเดต data.otp
+              onChange={(e) =>
+                setData({ ...data, otp: (e.target as HTMLInputElement).value })
+              } // อัปเดต data.otp
             />
             <Select
-              id="animal"
               className="max-w-xs"
+              id="animal"
               label="Favorite Animal"
               labelPlacement="outside"
               name="select"
@@ -162,21 +173,21 @@ export default function FormPage() {
               ))}
             </Select>
             <Switch
-              id="switch1"
-              type="checkbox"
               defaultSelected={data.switch1} // ใช้ data.switch1
+              id="switch1"
               name="switch1"
               size="sm"
+              type="checkbox"
               onChange={(e) => setData({ ...data, switch1: e.target.checked })} // อัปเดต data.switch1
             >
               Enable A function
             </Switch>
             <Switch
-              id="switch2"
-              type="checkbox"
               defaultSelected={data.switch2} // ใช้ data.switch2
+              id="switch2"
               name="switch2"
               size="sm"
+              type="checkbox"
               onChange={(e) => setData({ ...data, switch2: e.target.checked })} // อัปเดต data.switch2
             >
               Enable B function
