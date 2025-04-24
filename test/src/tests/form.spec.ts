@@ -114,7 +114,7 @@ test.describe("Input by tab", () => {
 
 test.describe("Input by mouse", () => {
   testCase.forEach((testData, index) => {
-    test(`mouse typing : ${testData.fullName} with isStraight=${index}`, async ({
+    test.only(`mouse moving : ${testData.fullName} with ${index ? "straight line" : "non-straight line"}`, async ({
       page,
     }) => {
       const formPage = new MouseMovementFormPage(page);
@@ -140,7 +140,9 @@ test.describe("Input by mouse", () => {
       await page.waitForTimeout(1000);
       await formPage.moveto({ x: 510, y: 610 }, { x: 510, y: 650 }, 16, myBool);
       await formPage.myClick();
-      await page.waitForTimeout(1000);
+      await page.waitForTimeout(500);
+
+      expect(checkUrl(page.url())).toBe(true);
     });
   });
 });
