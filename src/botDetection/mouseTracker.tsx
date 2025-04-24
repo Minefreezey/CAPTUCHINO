@@ -23,7 +23,7 @@ export const MouseHoverCheck: React.FC<MouseTrackerProps> = ({
 }) => {
   const [hoveredElementId, setHoveredElementId] = useState<string | null>(null);
   const [lastInsideElementId, setLastInsideElementId] = useState<string | null>(
-    null
+    null,
   );
 
   const setInsideBlockAndLog = (elementId: string | null) => {
@@ -33,7 +33,7 @@ export const MouseHoverCheck: React.FC<MouseTrackerProps> = ({
       if (elementId) {
         console.log(
           `Inside the block: ${inside}, Element ID: ${elementId}`,
-          data
+          data,
         );
       } else {
         console.log("Outside the block");
@@ -107,7 +107,7 @@ export const MouseHoverCheck: React.FC<MouseTrackerProps> = ({
 
         if (hoveredElementId !== id && hasChanged) {
           console.log(
-            `Suspicious activity detected: Input changed on ${id} but mouse not over it.`
+            `Suspicious activity detected: Input changed on ${id} but mouse not over it.`,
           );
         } else if (hasChanged) {
           console.log(`Input changed on ${id} with mouse over.`);
@@ -124,7 +124,7 @@ export const MouseHoverCheck: React.FC<MouseTrackerProps> = ({
 
   const addDropdownChangeHandler = () => {
     const dropdown = document.getElementById(
-      "animal"
+      "animal",
     ) as HTMLSelectElement | null;
 
     if (dropdown) {
@@ -140,7 +140,7 @@ export const MouseHoverCheck: React.FC<MouseTrackerProps> = ({
       const handler = () => {
         if (!isMouseOver) {
           console.log(
-            "Suspicious activity detected: Dropdown changed on animal but mouse not over it."
+            "Suspicious activity detected: Dropdown changed on animal but mouse not over it.",
           );
         } else {
           console.log("Dropdown changed on animal with mouse over.");
@@ -161,7 +161,7 @@ export const MouseHoverCheck: React.FC<MouseTrackerProps> = ({
 
   const addDateChangeHandler = () => {
     const dateInput = document.getElementById(
-      "date"
+      "date",
     ) as HTMLInputElement | null;
 
     if (dateInput) {
@@ -177,7 +177,7 @@ export const MouseHoverCheck: React.FC<MouseTrackerProps> = ({
       const handleChange = () => {
         if (!isMouseOver) {
           console.log(
-            "Suspicious activity detected: Date changed but mouse not over it."
+            "Suspicious activity detected: Date changed but mouse not over it.",
           );
         } else {
           console.log("Date changed with mouse over.");
@@ -203,7 +203,7 @@ export const MouseHoverCheck: React.FC<MouseTrackerProps> = ({
       const handler = () => {
         if (hoveredElementId !== id) {
           console.log(
-            `Suspicious activity detected: Switch toggled on ${id} but mouse not over it.`
+            `Suspicious activity detected: Switch toggled on ${id} but mouse not over it.`,
           );
         } else {
           console.log(`Switch toggled on ${id} with mouse over.`);
@@ -223,7 +223,7 @@ export const MouseHoverCheck: React.FC<MouseTrackerProps> = ({
       const handler = () => {
         if (hoveredElementId !== "button") {
           console.log(
-            `Suspicious activity detected: Button clicked on button but mouse not over it.`
+            `Suspicious activity detected: Button clicked on button but mouse not over it.`,
           );
         } else {
           console.log(`Button clicked on button with mouse over.`);
