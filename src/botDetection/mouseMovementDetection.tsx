@@ -101,7 +101,7 @@ export function MouseMovementDetection(
       const botDetectionRatio =
         historyResult.botCount / historyResult.calculateCount;
 
-      setStatus(botDetectionRatio > BOT_RATIO_THRESHOLD ? "yes" : "no");
+      // setStatus(botDetectionRatio > BOT_RATIO_THRESHOLD ? "yes" : "no");
     }
   }, [historyResult]);
 }

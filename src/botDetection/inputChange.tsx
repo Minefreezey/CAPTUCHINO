@@ -53,22 +53,24 @@ export function InputChange(
     setBotFlag((prev) => {
       const newFlags = [...prev];
 
-      newFlags[1] = isSuspicious ? 1 : 0;
+      if (isSuspicious) {
+        newFlags[1] = 1;
+      }
 
       return newFlags;
     });
 
-    if (newCharacters.length > 1) {
-      setTimeout(() => {
-        setStatus("yes");
-        console.log("Suspicious!");
-      }, 30);
-    } else {
-      setTimeout(() => {
-        setStatus("no");
-        console.log("Not suspicious");
-      }, 30);
-    }
+    // if (newCharacters.length > 1) {
+    //   setTimeout(() => {
+    //     setStatus("yes");
+    //     console.log("Suspicious!");
+    //   }, 30);
+    // } else {
+    //   setTimeout(() => {
+    //     setStatus("no");
+    //     console.log("Not suspicious");
+    //   }, 30);
+    // }
   };
 
   return { inputDurations, handleInputChange };
