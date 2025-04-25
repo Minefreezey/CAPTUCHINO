@@ -80,11 +80,11 @@ export function MouseMovementDetection(
         let suspicionScore = 0;
 
         // Evaluate metrics to determine suspicious behavior
-        if (result.avgJitter < 0.001) suspicionScore++;
-        if (result.avgAngularChange < 0.1) suspicionScore++;
-        if (result.speedVariance < 0.05) suspicionScore++;
-        if (result.pauseCount === 0) suspicionScore++;
-        if (result.avgCurvature < 0.1) suspicionScore++;
+        if (result.avgJitter < 0.0025) suspicionScore++;
+        if (result.avgAngularChange < 0.15) suspicionScore++;
+        if (result.speedVariance < 0.075) suspicionScore++;
+        if (result.pauseCount <= 0) suspicionScore++;
+        if (result.avgCurvature < 0.15) suspicionScore++;
 
         const isSuspicious = suspicionScore >= 3;
         const newBotCount = prev.botCount + (isSuspicious ? 1 : 0);
