@@ -15,7 +15,6 @@ import { useNavigate } from "react-router-dom";
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
 import Captuchino from "@/captuchino/captuchino";
-// Removed unused imports
 export const animals = [
   { key: "cat", label: "Cat" },
   { key: "dog", label: "Dog" },

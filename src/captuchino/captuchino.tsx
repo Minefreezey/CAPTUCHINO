@@ -5,6 +5,7 @@ import { InputChange } from "@/botDetection/inputChange";
 import { MouseMovementDetection } from "@/botDetection/mouseMovementDetection";
 import { MouseHoverCheck } from "@/botDetection/mouseTracker";
 
+// Interface for the data structure
 interface Data {
   fullName: string;
   date: string;
@@ -16,18 +17,22 @@ interface Data {
   button: string;
 }
 
+// Props for the Captuchino component
 interface CaptuchinoProps {
-  children: React.ReactNode;
-  status: "yes" | "no";
-  setStatus: React.Dispatch<React.SetStateAction<"yes" | "no">>;
-  submitted: "yes" | "no";
-  data: Data;
+  children: React.ReactNode; // Child components
+  status: "yes" | "no"; // Current status
+  setStatus: React.Dispatch<React.SetStateAction<"yes" | "no">>; // Function to update status
+  submitted: "yes" | "no"; // Submission status
+  data: Data; // Data object
 }
+
+// Interface for mouse position
 interface MousePosition {
   x: number;
   y: number;
 }
 
+// Captuchino component
 export default function Captuchino({
   children,
   status,
@@ -35,30 +40,34 @@ export default function Captuchino({
   submitted,
   data,
 }: CaptuchinoProps) {
-  const [botFlag, setBotFlag] = useState<number[]>([0, 0, 0]);
-  const THRESHOLD = 2;
+  const [botFlag, setBotFlag] = useState<number[]>([0, 0, 0]); // State to track bot detection flags
+  const THRESHOLD = 2; // Threshold for suspicious behavior
 
+  // Effect to update status based on bot detection flags
   useEffect(() => {
     const suspiciousCount = botFlag.reduce((count, flag) => count + flag, 0);
 
     if (suspiciousCount >= THRESHOLD) {
-      setStatus("yes");
+      setStatus("yes"); // Mark as suspicious
     } else {
-      setStatus("no");
+      setStatus("no"); // Mark as not suspicious
     }
   }, [botFlag, setStatus]);
+
   const [mousePosition, setMousePosition] = useState<MousePosition>({
     x: 0,
     y: 0,
-  });
-  const [pressedKey, setPressedKey] = useState<string | null>(null);
+  }); // State to track mouse position
+  const [pressedKey, setPressedKey] = useState<string | null>(null); // State to track the last pressed key
 
+  // Function to handle mouse movement
   const handleMouseMove = (event: MouseEvent) => {
     const newMousePosition = { x: event.clientX, y: event.clientY };
 
     setMousePosition(newMousePosition);
   };
 
+  // Effect to add and remove event listeners for mouse movement and key presses
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       setPressedKey(event.key);
@@ -73,10 +82,13 @@ export default function Captuchino({
     };
   }, []);
 
-  MouseMovementDetection(setBotFlag); // Call mouse Coordinates function
+  // Call the MouseMovementDetection function to analyze mouse movement
+  MouseMovementDetection(setBotFlag);
 
+  // Destructure the handleInputChange function from InputChange
   const { handleInputChange } = InputChange(setBotFlag);
 
+  // Effect to add and remove event listeners for form input changes
   useEffect(() => {
     const formElement = document.querySelector("form");
 
@@ -91,6 +103,7 @@ export default function Captuchino({
     };
   }, [handleInputChange]);
 
+  // Function to capture the elapsed time since the component was mounted
   const GetCapturedTime = () => {
     const [capturedTime, setCapturedTime] = useState<number>(0);
 
@@ -109,11 +122,12 @@ export default function Captuchino({
     return capturedTime;
   };
 
-  const capturedTime = GetCapturedTime();
+  const capturedTime = GetCapturedTime(); // Get the captured time
 
+  // Effect to update status based on submission and captured time
   useEffect(() => {
     if (submitted === "yes" && capturedTime < 4000) {
-      setStatus("yes");
+      setStatus("yes"); // Mark as suspicious if submitted quickly
     }
   }, [submitted, capturedTime, setStatus]);
 
@@ -124,7 +138,7 @@ export default function Captuchino({
         <br />
         <Code>{`Flag: ${botFlag}`}</Code>
         <br />
-        <Code>{`Mouse Position: X: ${mousePosition.x}, Y: ${mousePosition.y}`}</Code>{" "}
+        <Code>{`Mouse Position: X: ${mousePosition.x}, Y: ${mousePosition.y}`}</Code>
         <br />
         <Code>{`Pressed Key: ${pressedKey || "None"}`}</Code>
         <br />
@@ -158,7 +172,10 @@ export default function Captuchino({
           ☕
         </div>
       </div>
+
+      {/* Mouse hover detection */}
       <MouseHoverCheck data={data} setBotFlag={setBotFlag} />
+
       <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
         {children}
       </main>
