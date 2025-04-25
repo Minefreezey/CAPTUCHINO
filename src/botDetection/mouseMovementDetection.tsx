@@ -27,7 +27,7 @@ export function MouseMovementDetection(
   setBotFlag: React.Dispatch<React.SetStateAction<number[]>>,
 ) {
   const [mouseLog, setMouseLog] = useState<Coordinates[]>([]);
-  const [historyResult, setHistoryResult] = useState<HistoryResult>({
+  const [, setHistoryResult] = useState<HistoryResult>({
     calculateCount: 0,
     botCount: 0,
   });
@@ -35,7 +35,6 @@ export function MouseMovementDetection(
   const lastTimeRef = useRef<number>(0);
   const MAX_LOG_SIZE = 200;
   const BATCH_SIZE = 50;
-  const BOT_RATIO_THRESHOLD = 0.3;
 
   const handleMouseMove = (event: MouseEvent) => {
     const now = Date.now();
@@ -94,15 +93,6 @@ export function MouseMovementDetection(
       });
     }
   }, [mouseLog]);
-
-  useEffect(() => {
-    if (historyResult.calculateCount > 0) {
-      const botDetectionRatio =
-        historyResult.botCount / historyResult.calculateCount;
-
-      // setStatus(botDetectionRatio > BOT_RATIO_THRESHOLD ? "yes" : "no");
-    }
-  }, [historyResult]);
 }
 
 export const AnalyzeMouseMovement = (
@@ -161,7 +151,7 @@ export const AnalyzeMouseMovement = (
     totalAngularChange += angle;
 
     const arcLength = d01 + d12;
-    const chordLength = d02 || 1e-6; // to avoid divide by zero
+    const chordLength = d02 || 1e-6;
     const curvature = arcLength / chordLength;
 
     totalCurvature += curvature;

@@ -75,10 +75,7 @@ export default function Captuchino({
 
   MouseMovementDetection(setBotFlag); // Call mouse Coordinates function
 
-  const { inputDurations, handleInputChange } = InputChange(
-    setStatus,
-    setBotFlag,
-  );
+  const { handleInputChange } = InputChange(setBotFlag);
 
   useEffect(() => {
     const formElement = document.querySelector("form");
@@ -115,9 +112,7 @@ export default function Captuchino({
   const capturedTime = GetCapturedTime();
 
   useEffect(() => {
-    console.log(submitted);
     if (submitted === "yes" && capturedTime < 4000) {
-      console.log("suspicious!");
       setStatus("yes");
     }
   }, [submitted, capturedTime, setStatus]);

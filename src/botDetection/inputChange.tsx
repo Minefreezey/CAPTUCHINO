@@ -5,7 +5,6 @@ interface InputDurations {
 }
 
 export function InputChange(
-  setStatus: React.Dispatch<React.SetStateAction<"yes" | "no">>,
   setBotFlag: React.Dispatch<React.SetStateAction<number[]>>,
 ) {
   const [inputDurations, setInputDurations] = React.useState<InputDurations>(
@@ -13,13 +12,6 @@ export function InputChange(
   );
   const lastChangeTimeRef = React.useRef<Record<string, number>>({});
   const previousValuesRef = React.useRef<Record<string, string>>({});
-
-  const calculateAvg = (values: number[]) => {
-    if (values.length === 0) return 0;
-    const sum = values.reduce((acc, val) => acc + val, 0);
-
-    return sum / values.length;
-  };
 
   const handleInputChange = (event: Event) => {
     const target = event.target as HTMLInputElement | HTMLTextAreaElement;
@@ -44,10 +36,6 @@ export function InputChange(
     lastChangeTimeRef.current[fieldName] = currentTime;
     previousValuesRef.current[fieldName] = currentValue;
 
-    // console.log(`Input changed: ${target.name} = ${target.value}`);
-    // console.log(`Time is : ${durations}`);
-    // console.log(`Character typed : ${newCharacters}`);
-
     const isSuspicious = newCharacters.length > 2;
 
     setBotFlag((prev) => {
@@ -59,18 +47,6 @@ export function InputChange(
 
       return newFlags;
     });
-
-    // if (newCharacters.length > 1) {
-    //   setTimeout(() => {
-    //     setStatus("yes");
-    //     console.log("Suspicious!");
-    //   }, 30);
-    // } else {
-    //   setTimeout(() => {
-    //     setStatus("no");
-    //     console.log("Not suspicious");
-    //   }, 30);
-    // }
   };
 
   return { inputDurations, handleInputChange };
