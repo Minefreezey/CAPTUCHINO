@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Input,
   Form,
@@ -15,7 +15,6 @@ import { useNavigate } from "react-router-dom";
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
 import Captuchino from "@/captuchino/captuchino";
-// Removed unused imports
 export const animals = [
   { key: "cat", label: "Cat" },
   { key: "dog", label: "Dog" },
@@ -48,10 +47,6 @@ export default function FormPage() {
   const navigate = useNavigate();
   const [status, setStatus] = React.useState<"yes" | "no">("no");
   const [submitStatus, setSubmitStatus] = React.useState<"yes" | "no">("no");
-
-  //const [fullName, setFullName] = React.useState("");
-  // Removed unused state variables
-  // setSubmitted("yes");
   const [data, setData] = React.useState<Data>({
     fullName: "",
     date: "",
@@ -76,17 +71,9 @@ export default function FormPage() {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log("Before state update, submitted:", submitted);
-
     setSubmitted("yes"); // Update the state
     setSubmitStatus(status); // Update submitStatus
-
-    console.log("After state update, submitted:", submitted);
   };
-
-  useEffect(() => {
-    console.log("Data updated:", data);
-  }, [data]);
 
   return (
     <DefaultLayout isRobot={submitStatus}>
@@ -116,18 +103,17 @@ export default function FormPage() {
               labelPlacement="outside"
               name="fullname"
               placeholder="Enter your full name"
-              value={data.fullName} // ใช้ data.fullName
-              onChange={(e) => setData({ ...data, fullName: e.target.value })} // อัปเดต data.fullName
+              value={data.fullName}
+              onChange={(e) => setData({ ...data, fullName: e.target.value })}
             />
             <DatePicker
               id="date"
               label="Date"
-              name="date"
               labelPlacement="outside"
-              //value={data.date} // ใช้ data.date
+              name="date"
               onChange={(date) =>
                 setData({ ...data, date: date?.toString() || "" })
-              } // อัปเดต data.date
+              }
             />
             <NumberInput
               className="max-w-xs"
@@ -136,10 +122,9 @@ export default function FormPage() {
               labelPlacement="outside"
               name="number"
               placeholder="Enter the amount"
-              //value={data.number} // ใช้ data.number
               onChange={(value) =>
                 setData({ ...data, number: value.toString() })
-              } // Convert number to string before updating data.number
+              }
             />
             <InputOtp
               isRequired
@@ -150,10 +135,10 @@ export default function FormPage() {
               name="otp"
               placeholder="Enter code"
               type="text"
-              value={data.otp} // ใช้ data.otp
+              value={data.otp}
               onChange={(e) =>
                 setData({ ...data, otp: (e.target as HTMLInputElement).value })
-              } // อัปเดต data.otp
+              }
             />
             <Select
               className="max-w-xs"
@@ -162,8 +147,8 @@ export default function FormPage() {
               labelPlacement="outside"
               name="select"
               placeholder="Select an animal"
-              value={data.animal} // ใช้ data.animal
-              onChange={(e) => setData({ ...data, animal: e.target.value })} // อัปเดต data.animal
+              value={data.animal}
+              onChange={(e) => setData({ ...data, animal: e.target.value })}
             >
               {animals.map((animal) => (
                 <SelectItem key={animal.key} data-value={animal.key}>
@@ -172,22 +157,22 @@ export default function FormPage() {
               ))}
             </Select>
             <Switch
-              defaultSelected={data.switch1} // ใช้ data.switch1
+              defaultSelected={data.switch1}
               id="switch1"
               name="switch1"
               size="sm"
               type="checkbox"
-              onChange={(e) => setData({ ...data, switch1: e.target.checked })} // อัปเดต data.switch1
+              onChange={(e) => setData({ ...data, switch1: e.target.checked })}
             >
               Enable A function
             </Switch>
             <Switch
-              defaultSelected={data.switch2} // ใช้ data.switch2
+              defaultSelected={data.switch2}
               id="switch2"
               name="switch2"
               size="sm"
               type="checkbox"
-              onChange={(e) => setData({ ...data, switch2: e.target.checked })} // อัปเดต data.switch2
+              onChange={(e) => setData({ ...data, switch2: e.target.checked })}
             >
               Enable B function
             </Switch>
@@ -196,7 +181,7 @@ export default function FormPage() {
               name="submit"
               type="submit"
               variant="bordered"
-              onPress={() => setData({ ...data, button: "clicked" })} // อัปเดต data.button
+              onPress={() => setData({ ...data, button: "clicked" })}
             >
               Submit
             </Button>

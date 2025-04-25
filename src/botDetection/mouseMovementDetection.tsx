@@ -1,15 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 
+// Interface to represent the mouse position
 export interface MousePosition {
   x: number;
   y: number;
 }
 
+// Interface to represent mouse movement coordinates with timestamps
 export interface Coordinates {
   mousePosition: MousePosition;
   time_stamp: number;
 }
 
+// Interface to represent the result of mouse movement analysis
 export interface AnalyzeMouseResult {
   avgJitter: number;
   avgAngularChange: number;
@@ -18,29 +21,32 @@ export interface AnalyzeMouseResult {
   avgCurvature: number;
 }
 
+// Interface to track bot detection history
 export interface HistoryResult {
   calculateCount: number;
   botCount: number;
 }
 
+// Function to detect mouse movement patterns and update bot detection flags
 export function MouseMovementDetection(
   setBotFlag: React.Dispatch<React.SetStateAction<number[]>>,
 ) {
-  const [mouseLog, setMouseLog] = useState<Coordinates[]>([]);
-  const [historyResult, setHistoryResult] = useState<HistoryResult>({
+  const [mouseLog, setMouseLog] = useState<Coordinates[]>([]); // State to store mouse movement logs
+  const [, setHistoryResult] = useState<HistoryResult>({
     calculateCount: 0,
     botCount: 0,
   });
 
-  const lastTimeRef = useRef<number>(0);
-  const MAX_LOG_SIZE = 200;
-  const BATCH_SIZE = 50;
-  const BOT_RATIO_THRESHOLD = 0.3;
+  const lastTimeRef = useRef<number>(0); // Ref to track the last timestamp of mouse movement
+  const MAX_LOG_SIZE = 200; // Maximum size of the mouse log
+  const BATCH_SIZE = 50; // Number of movements to analyze in each batch
 
+  // Event handler for mouse movement
   const handleMouseMove = (event: MouseEvent) => {
     const now = Date.now();
     const newMousePosition = { x: event.clientX, y: event.clientY };
 
+    // Log mouse movement if enough time has passed since the last event
     if (now - lastTimeRef.current > 10) {
       setMouseLog((prev) => {
         const newLog = [
@@ -48,12 +54,14 @@ export function MouseMovementDetection(
           { mousePosition: newMousePosition, time_stamp: now },
         ];
 
+        // Limit the log size to MAX_LOG_SIZE
         return newLog.length > MAX_LOG_SIZE ? newLog.slice(BATCH_SIZE) : newLog;
       });
       lastTimeRef.current = now;
     }
   };
 
+  // Add and remove the mousemove event listener
   useEffect(() => {
     window.addEventListener("mousemove", handleMouseMove);
 
@@ -62,6 +70,7 @@ export function MouseMovementDetection(
     };
   }, []);
 
+  // Analyze mouse movement logs in batches
   useEffect(() => {
     if (mouseLog.length >= BATCH_SIZE && mouseLog.length % BATCH_SIZE === 0) {
       const result = AnalyzeMouseMovement(mouseLog);
@@ -70,6 +79,7 @@ export function MouseMovementDetection(
         const newCalculateCount = prev.calculateCount + 1;
         let suspicionScore = 0;
 
+        // Evaluate metrics to determine suspicious behavior
         if (result.avgJitter < 0.001) suspicionScore++;
         if (result.avgAngularChange < 0.1) suspicionScore++;
         if (result.speedVariance < 0.05) suspicionScore++;
@@ -79,6 +89,7 @@ export function MouseMovementDetection(
         const isSuspicious = suspicionScore >= 3;
         const newBotCount = prev.botCount + (isSuspicious ? 1 : 0);
 
+        // Update bot detection flags
         setBotFlag((prev) => {
           const newFlags = [...prev];
 
@@ -94,17 +105,9 @@ export function MouseMovementDetection(
       });
     }
   }, [mouseLog]);
-
-  useEffect(() => {
-    if (historyResult.calculateCount > 0) {
-      const botDetectionRatio =
-        historyResult.botCount / historyResult.calculateCount;
-
-      // setStatus(botDetectionRatio > BOT_RATIO_THRESHOLD ? "yes" : "no");
-    }
-  }, [historyResult]);
 }
 
+// Function to analyze mouse movement logs and calculate metrics
 export const AnalyzeMouseMovement = (
   mouseLog: Coordinates[],
 ): AnalyzeMouseResult => {
@@ -114,8 +117,9 @@ export const AnalyzeMouseMovement = (
   let pauseCount = 0;
   let totalCurvature = 0;
 
-  const PAUSE_THRESHOLD_MS = 200;
+  const PAUSE_THRESHOLD_MS = 200; // Threshold for detecting pauses
 
+  // Iterate through the mouse log to calculate metrics
   for (let i = 2; i < mouseLog.length; i++) {
     const { x: x0, y: y0 } = mouseLog[i - 2].mousePosition;
     const { x: x1, y: y1 } = mouseLog[i - 1].mousePosition;
@@ -134,6 +138,7 @@ export const AnalyzeMouseMovement = (
 
     speeds.push(speed);
 
+    // Detect pauses in movement
     if (d12 < 1 && timeDiff > PAUSE_THRESHOLD_MS) {
       pauseCount += 1;
     }
@@ -161,7 +166,7 @@ export const AnalyzeMouseMovement = (
     totalAngularChange += angle;
 
     const arcLength = d01 + d12;
-    const chordLength = d02 || 1e-6; // to avoid divide by zero
+    const chordLength = d02 || 1e-6;
     const curvature = arcLength / chordLength;
 
     totalCurvature += curvature;
